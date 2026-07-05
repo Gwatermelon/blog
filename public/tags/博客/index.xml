@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>博客 on Ge Zhang · 技术笔记</title>
-    <link>http://localhost:1313/tags/%E5%8D%9A%E5%AE%A2/</link>
+    <link>https://blog-shf.pages.dev/tags/%E5%8D%9A%E5%AE%A2/</link>
     <description>Recent content in 博客 on Ge Zhang · 技术笔记</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 04 Jul 2026 22:01:44 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/%E5%8D%9A%E5%AE%A2/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog-shf.pages.dev/tags/%E5%8D%9A%E5%AE%A2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hello World：从这里开始</title>
-      <link>http://localhost:1313/posts/hello-world/</link>
+      <link>https://blog-shf.pages.dev/posts/hello-world/</link>
       <pubDate>Sat, 04 Jul 2026 22:01:44 +0800</pubDate>
-      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <guid>https://blog-shf.pages.dev/posts/hello-world/</guid>
       <description>关于这个博客为什么存在，以及接下来会记录些什么。</description>
     </item>
   </channel>

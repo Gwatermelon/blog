@@ -1,12 +1,14 @@
-baseURL = "http://localhost:1313/"
+baseURL = "https://blog-shf.pages.dev/"
 locale = "zh-CN"
 defaultContentLanguage = "zh"
 title = "Ge Zhang · 技术笔记"
 theme = "PaperMod"
-paginate = 8
 enableRobotsTXT = true
 enableEmoji = true
 hasCJKLanguage = true
+
+[pagination]
+  pagerSize = 8
 
 [taxonomies]
   category = "categories"
