@@ -50,6 +50,9 @@ body {
 #menu a:hover,
 #menu .active { color: var(--accent); }
 
+#menu { scrollbar-width: none; }
+#menu::-webkit-scrollbar { display: none; }
+
 .home-info {
   position: relative;
   min-height: 310px;
@@ -191,4 +194,80 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* Research workspace */
+.todo-page, .paper-library-header, .paper-library-intro, .paper-library, .paper-filters { width: 100%; }
+.todo-hero, .paper-library-header {
+  margin: 28px 0 24px;
+  padding: 38px 40px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: linear-gradient(145deg, var(--entry), var(--accent-soft));
+}
+.todo-eyebrow {
+  color: var(--accent);
+  font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .16em;
+}
+.todo-hero h1, .paper-library-header h1 {
+  margin: 10px 0 12px;
+  font-size: clamp(36px, 7vw, 58px);
+  line-height: 1.08;
+  letter-spacing: -.055em;
+}
+.todo-hero > p, .paper-library-header > p { max-width: 650px; color: var(--secondary); font-size: 17px; }
+.todo-progress { margin-top: 30px; }
+.todo-progress-copy { display: flex; align-items: baseline; gap: 8px; color: var(--secondary); }
+.todo-progress-copy strong { color: var(--primary); font-size: 25px; }
+.todo-progress-track { height: 8px; margin-top: 10px; overflow: hidden; border-radius: 99px; background: var(--tertiary); }
+.todo-progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #20b99a); transition: width .3s ease; }
+.todo-intro { margin: 0 4px 26px; color: var(--secondary); font-size: 14px; }
+.todo-grid { display: grid; gap: 20px; }
+.todo-group { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--entry); }
+.todo-group > header { padding: 24px 26px 18px; border-bottom: 1px solid var(--border); }
+.todo-group h2 { margin: 0 0 5px; font-size: 22px; letter-spacing: -.025em; }
+.todo-group header p { margin: 0; color: var(--secondary); font-size: 14px; }
+.todo-items { padding: 8px 12px 12px; }
+.todo-item { display: grid; grid-template-columns: 24px 1fr; gap: 13px; align-items: start; padding: 15px 14px; border-radius: 12px; cursor: pointer; transition: background .18s ease; }
+.todo-item:hover { background: var(--accent-soft); }
+.todo-item input { position: absolute; opacity: 0; pointer-events: none; }
+.todo-check { display: grid; width: 22px; height: 22px; margin-top: 1px; place-items: center; border: 2px solid var(--border); border-radius: 7px; background: var(--theme); transition: .18s ease; }
+.todo-check::after { content: ""; width: 8px; height: 4px; border: solid white; border-width: 0 0 2px 2px; opacity: 0; transform: translateY(-1px) rotate(-45deg) scale(.6); transition: .18s ease; }
+.todo-item input:checked + .todo-check { border-color: var(--accent); background: var(--accent); }
+.todo-item input:checked + .todo-check::after { opacity: 1; transform: translateY(-1px) rotate(-45deg) scale(1); }
+.todo-item input:focus-visible + .todo-check { outline: 3px solid var(--accent-soft); outline-offset: 3px; }
+.todo-copy { display: grid; gap: 4px; }
+.todo-copy strong { color: var(--primary); font-size: 15px; line-height: 1.45; }
+.todo-copy small { color: var(--secondary); font-size: 13px; line-height: 1.55; }
+.todo-item input:checked ~ .todo-copy strong { color: var(--secondary); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.research-scratchpad { margin-top: 24px; padding: 28px; border: 1px solid var(--border); border-radius: 18px; background: var(--entry); }
+.research-scratchpad h2 { margin: 6px 0 4px; }
+.research-scratchpad p { margin: 0 0 18px; color: var(--secondary); }
+.research-scratchpad textarea { width: 100%; resize: vertical; padding: 16px; color: var(--content); border: 1px solid var(--border); border-radius: 12px; outline: none; background: var(--theme); font: inherit; line-height: 1.7; }
+.research-scratchpad textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.scratchpad-footer { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 12px; color: var(--secondary); font-size: 12px; }
+#todo-reset { padding: 8px 12px; color: var(--secondary); border: 1px solid var(--border); border-radius: 9px; background: transparent; cursor: pointer; }
+#todo-reset:hover { color: var(--accent); border-color: var(--accent); }
+.paper-library-intro { margin: 26px 0; }
+.paper-filters { display: flex; flex-wrap: wrap; gap: 9px; margin: 0 0 22px; }
+.paper-filters a { padding: 8px 13px; color: var(--secondary); border: 1px solid var(--border); border-radius: 99px; background: var(--entry); font-size: 13px; }
+.paper-filters a:hover { color: var(--accent); border-color: var(--accent); }
+.paper-library { display: grid; gap: 18px; }
+.paper-card { padding: 28px 30px; border: 1px solid var(--border); border-radius: 18px; background: var(--entry); transition: transform .2s ease, border-color .2s ease; }
+.paper-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); }
+.paper-card-topline { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; color: var(--secondary); font-size: 12px; }
+.paper-status { padding: 4px 9px; color: var(--accent); border-radius: 99px; background: var(--accent-soft); font-weight: 700; }
+.paper-status[data-status="在读"] { color: #0c8b72; background: rgba(32, 185, 154, .12); }
+.paper-card h2 { margin: 14px 0 10px; font-size: 23px; line-height: 1.35; letter-spacing: -.025em; }
+.paper-card > p { color: var(--secondary); line-height: 1.7; }
+.paper-card footer { display: flex; gap: 18px; margin-top: 20px; }
+.paper-card footer a { color: var(--accent); font-size: 13px; font-weight: 650; }
+
+@media (max-width: 700px) {
+  .todo-hero, .paper-library-header { padding: 30px 24px; border-radius: 20px; }
+  .todo-group > header { padding-inline: 20px; }
+  .todo-items { padding-inline: 6px; }
+  .research-scratchpad, .paper-card { padding: 24px 20px; }
+  .scratchpad-footer { align-items: flex-start; flex-direction: column; }
 }

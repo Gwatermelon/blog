@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>投机解码 on Ge Zhang · 技术笔记</title>
+    <link>https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81/</link>
+    <description>Recent content in 投机解码 on Ge Zhang · 技术笔记</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 05 Jul 2026 11:30:00 +0800</lastBuildDate>
+    <atom:link href="https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>论文研读：Fast Inference from Transformers via Speculative Decoding</title>
+      <link>https://blog-shf.pages.dev/papers/speculative-decoding/</link>
+      <pubDate>Sun, 05 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://blog-shf.pages.dev/papers/speculative-decoding/</guid>
+      <description>投机解码经典工作：用小模型生成草稿，由大模型并行验证，同时保持输出分布不变。</description>
+    </item>
+  </channel>
+</rss>

@@ -6,8 +6,15 @@
     <description>Recent content on Ge Zhang · 技术笔记</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 04 Jul 2026 22:01:44 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2026 11:30:00 +0800</lastBuildDate>
     <atom:link href="https://blog-shf.pages.dev/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>论文研读：Fast Inference from Transformers via Speculative Decoding</title>
+      <link>https://blog-shf.pages.dev/papers/speculative-decoding/</link>
+      <pubDate>Sun, 05 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://blog-shf.pages.dev/papers/speculative-decoding/</guid>
+      <description>投机解码经典工作：用小模型生成草稿，由大模型并行验证，同时保持输出分布不变。</description>
+    </item>
     <item>
       <title>Hello World：从这里开始</title>
       <link>https://blog-shf.pages.dev/posts/hello-world/</link>
@@ -16,11 +23,25 @@
       <description>关于这个博客为什么存在，以及接下来会记录些什么。</description>
     </item>
     <item>
+      <title>论文速读：Accelerating Large Language Model Decoding with Speculative Sampling</title>
+      <link>https://blog-shf.pages.dev/papers/speculative-sampling/</link>
+      <pubDate>Sat, 04 Jul 2026 15:00:00 +0800</pubDate>
+      <guid>https://blog-shf.pages.dev/papers/speculative-sampling/</guid>
+      <description>从采样等价性出发理解投机采样，以及它在不同任务与模型组合下的收益边界。</description>
+    </item>
+    <item>
       <title>从猜测到证据：一套可复用的调试方法</title>
       <link>https://blog-shf.pages.dev/posts/debugging-by-evidence/</link>
       <pubDate>Fri, 03 Jul 2026 19:30:00 +0800</pubDate>
       <guid>https://blog-shf.pages.dev/posts/debugging-by-evidence/</guid>
       <description>把调试从碰运气，变成不断缩小问题空间的工程过程。</description>
+    </item>
+    <item>
+      <title>论文速读：Medusa — Multiple Decoding Heads</title>
+      <link>https://blog-shf.pages.dev/papers/medusa/</link>
+      <pubDate>Fri, 03 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://blog-shf.pages.dev/papers/medusa/</guid>
+      <description>用多个解码头并行预测未来 token，探索不依赖独立草稿模型的推理加速路线。</description>
     </item>
     <item>
       <title>设计一个让调用者省心的 HTTP API</title>
@@ -35,6 +56,13 @@
       <pubDate>Sat, 20 Jun 2026 14:20:00 +0800</pubDate>
       <guid>https://blog-shf.pages.dev/posts/learning-system/</guid>
       <description>减少收藏焦虑，用输出、反馈和复习构建可持续的学习闭环。</description>
+    </item>
+    <item>
+      <title>Research Todo</title>
+      <link>https://blog-shf.pages.dev/todo/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/todo/</guid>
+      <description>记录近期工作安排、技术调研和论文阅读计划。</description>
     </item>
     <item>
       <title>关于我</title>

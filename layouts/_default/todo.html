@@ -1,0 +1,85 @@
+{{- define "main" }}
+<article class="todo-page">
+  <header class="todo-hero">
+    {{ partial "breadcrumbs.html" . }}
+    <span class="todo-eyebrow">RESEARCH WORKSPACE</span>
+    <h1>{{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+    <div class="todo-progress" aria-live="polite">
+      <div class="todo-progress-copy"><strong id="todo-progress-text">0 / 0</strong><span>项已完成</span></div>
+      <div class="todo-progress-track"><span id="todo-progress-bar"></span></div>
+    </div>
+  </header>
+
+  <div class="todo-intro post-content">{{ .Content }}</div>
+  <div class="todo-grid">
+    {{- range .Params.taskGroups }}
+    <section class="todo-group">
+      <header><h2>{{ .title }}</h2><p>{{ .subtitle }}</p></header>
+      <div class="todo-items">
+        {{- range .tasks }}
+        <label class="todo-item" for="task-{{ .id }}">
+          <input type="checkbox" id="task-{{ .id }}" data-task-id="{{ .id }}">
+          <span class="todo-check" aria-hidden="true"></span>
+          <span class="todo-copy"><strong>{{ .text }}</strong>{{- with .note }}<small>{{ . }}</small>{{- end }}</span>
+        </label>
+        {{- end }}
+      </div>
+    </section>
+    {{- end }}
+  </div>
+
+  <section class="research-scratchpad">
+    <div><span class="todo-eyebrow">QUICK NOTES</span><h2>临时研究笔记</h2><p>记录今天冒出来的问题、实验现象或下一步假设。</p></div>
+    <textarea id="research-notes" rows="7" placeholder="例如：接受率下降是否来自温度设置，而不是草稿模型能力？"></textarea>
+    <div class="scratchpad-footer"><span id="notes-status">自动保存在当前浏览器</span><button type="button" id="todo-reset">重置勾选状态</button></div>
+  </section>
+</article>
+
+<script>
+(() => {
+  const storageKey = 'gz-research-todo-v1';
+  const notesKey = 'gz-research-notes-v1';
+  const boxes = [...document.querySelectorAll('[data-task-id]')];
+  const progressText = document.getElementById('todo-progress-text');
+  const progressBar = document.getElementById('todo-progress-bar');
+  const notes = document.getElementById('research-notes');
+  const notesStatus = document.getElementById('notes-status');
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
+  boxes.forEach(box => { box.checked = Boolean(saved[box.dataset.taskId]); });
+  notes.value = localStorage.getItem(notesKey) || '';
+
+  function updateProgress() {
+    const done = boxes.filter(box => box.checked).length;
+    progressText.textContent = `${done} / ${boxes.length}`;
+    progressBar.style.width = boxes.length ? `${done / boxes.length * 100}%` : '0%';
+  }
+
+  boxes.forEach(box => box.addEventListener('change', () => {
+    saved[box.dataset.taskId] = box.checked;
+    localStorage.setItem(storageKey, JSON.stringify(saved));
+    updateProgress();
+  }));
+
+  let noteTimer;
+  notes.addEventListener('input', () => {
+    notesStatus.textContent = '正在保存…';
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => {
+      localStorage.setItem(notesKey, notes.value);
+      notesStatus.textContent = '已保存到当前浏览器';
+    }, 300);
+  });
+
+  document.getElementById('todo-reset').addEventListener('click', () => {
+    boxes.forEach(box => { box.checked = false; });
+    saved = {};
+    localStorage.removeItem(storageKey);
+    updateProgress();
+  });
+  updateProgress();
+})();
+</script>
+{{- end }}
+

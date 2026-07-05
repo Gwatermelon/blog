@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>投机采样 on Ge Zhang · 技术笔记</title>
+    <link>https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E9%87%87%E6%A0%B7/</link>
+    <description>Recent content in 投机采样 on Ge Zhang · 技术笔记</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 04 Jul 2026 15:00:00 +0800</lastBuildDate>
+    <atom:link href="https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E9%87%87%E6%A0%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>论文速读：Accelerating Large Language Model Decoding with Speculative Sampling</title>
+      <link>https://blog-shf.pages.dev/papers/speculative-sampling/</link>
+      <pubDate>Sat, 04 Jul 2026 15:00:00 +0800</pubDate>
+      <guid>https://blog-shf.pages.dev/papers/speculative-sampling/</guid>
+      <description>从采样等价性出发理解投机采样，以及它在不同任务与模型组合下的收益边界。</description>
+    </item>
+  </channel>
+</rss>

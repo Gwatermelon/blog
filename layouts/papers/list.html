@@ -1,0 +1,31 @@
+{{- define "main" }}
+<header class="paper-library-header">
+  {{ partial "breadcrumbs.html" . }}
+  <span class="todo-eyebrow">PAPER LIBRARY</span>
+  <h1>{{ .Title }}</h1>
+  <p>{{ .Description }}</p>
+</header>
+{{- if .Content }}<div class="paper-library-intro post-content">{{ .Content }}</div>{{- end }}
+<div class="paper-filters" aria-label="研究方向">
+  <a href="/research/inference-acceleration/">推理加速</a>
+  <a href="/research/ai-fundamentals/">AI 基础</a>
+  <a href="/research/ai-hardware/">硬件理论</a>
+</div>
+<div class="paper-library">
+  {{- range .Pages.ByDate.Reverse }}
+  <article class="paper-card">
+    <div class="paper-card-topline">
+      <span class="paper-status" data-status="{{ .Params.paperStatus }}">{{ .Params.paperStatus | default "待读" }}</span>
+      <span>{{ .Params.paperDomain }}</span><span>{{ .Params.paperVenue }}</span>
+    </div>
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <p>{{ .Summary | plainify | htmlUnescape }}</p>
+    <footer>
+      <a href="{{ .RelPermalink }}">阅读笔记 →</a>
+      {{- with .Params.paperUrl }}<a href="{{ . }}" target="_blank" rel="noopener">查看原文 ↗</a>{{- end }}
+    </footer>
+  </article>
+  {{- end }}
+</div>
+{{- end }}
+

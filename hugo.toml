@@ -21,9 +21,9 @@ hasCJKLanguage = true
 [params]
   env = "production"
   title = "Ge Zhang · 技术笔记"
-  description = "记录软件工程、后端开发与持续学习的个人技术博客"
+  description = "聚焦 AI 基础、大模型推理加速、投机推理与计算硬件的个人技术博客"
   author = "Ge Zhang"
-  keywords = ["技术博客", "软件工程", "后端开发", "编程"]
+  keywords = ["技术博客", "人工智能", "大模型推理", "投机推理", "AI 硬件"]
   defaultTheme = "auto"
   disableThemeToggle = false
   DateFormat = "2006 年 01 月 02 日"
@@ -42,7 +42,7 @@ hasCJKLanguage = true
 
   [params.homeInfoParams]
     Title = "你好，我是 Ge Zhang 👋"
-    Content = "这里记录我对 **软件工程、后端开发与效率工具** 的实践与思考。把复杂问题拆开，把踩过的坑写清楚，也把持续学习变成一件看得见的事。"
+    Content = "这里是我的 AI 系统研究工作台，聚焦 **大模型推理中的投机推理加速**，并持续整理 AI 基础原理、推理系统与计算硬件。把论文读深，把实验做实，也把研究过程变成可复用的知识。"
 
   [[params.socialIcons]]
     name = "github"
@@ -72,25 +72,35 @@ hasCJKLanguage = true
   url = "/posts/"
   weight = 10
 [[menu.main]]
-  identifier = "categories"
-  name = "分类"
-  url = "/categories/"
+  identifier = "research"
+  name = "研究专题"
+  url = "/research/"
   weight = 20
+[[menu.main]]
+  identifier = "papers"
+  name = "论文研读"
+  url = "/papers/"
+  weight = 30
+[[menu.main]]
+  identifier = "todo"
+  name = "Todo"
+  url = "/todo/"
+  weight = 40
 [[menu.main]]
   identifier = "archives"
   name = "归档"
   url = "/archives/"
-  weight = 30
+  weight = 50
 [[menu.main]]
   identifier = "about"
   name = "关于"
   url = "/about/"
-  weight = 40
+  weight = 60
 [[menu.main]]
   identifier = "search"
   name = "搜索"
   url = "/search/"
-  weight = 50
+  weight = 70
 
 [minify]
   disableXML = true
