@@ -1,4 +1,95 @@
-baseURL = "http://localhost/"
-languageCode = "zh-cn"
-title = "Ge Zhang"
+baseURL = "http://localhost:1313/"
+locale = "zh-CN"
+defaultContentLanguage = "zh"
+title = "Ge Zhang · 技术笔记"
 theme = "PaperMod"
+paginate = 8
+enableRobotsTXT = true
+enableEmoji = true
+hasCJKLanguage = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+  env = "production"
+  title = "Ge Zhang · 技术笔记"
+  description = "记录软件工程、后端开发与持续学习的个人技术博客"
+  author = "Ge Zhang"
+  keywords = ["技术博客", "软件工程", "后端开发", "编程"]
+  defaultTheme = "auto"
+  disableThemeToggle = false
+  DateFormat = "2006 年 01 月 02 日"
+  mainSections = ["posts"]
+  ShowReadingTime = true
+  ShowWordCount = true
+  ShowBreadCrumbs = true
+  ShowPostNavLinks = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  TocOpen = false
+  ShowShareButtons = false
+  ShowRssButtonInSectionTermList = true
+  ShowPageNums = true
+  displayFullLangName = true
+
+  [params.homeInfoParams]
+    Title = "你好，我是 Ge Zhang 👋"
+    Content = "这里记录我对 **软件工程、后端开发与效率工具** 的实践与思考。把复杂问题拆开，把踩过的坑写清楚，也把持续学习变成一件看得见的事。"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/Gwatermelon"
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+  [params.label]
+    text = "GZ / DEV"
+
+  [params.assets]
+    disableHLJS = true
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+  [markup.goldmark.renderer]
+    unsafe = true
+
+[[menu.main]]
+  identifier = "posts"
+  name = "文章"
+  url = "/posts/"
+  weight = 10
+[[menu.main]]
+  identifier = "categories"
+  name = "分类"
+  url = "/categories/"
+  weight = 20
+[[menu.main]]
+  identifier = "archives"
+  name = "归档"
+  url = "/archives/"
+  weight = 30
+[[menu.main]]
+  identifier = "about"
+  name = "关于"
+  url = "/about/"
+  weight = 40
+[[menu.main]]
+  identifier = "search"
+  name = "搜索"
+  url = "/search/"
+  weight = 50
+
+[minify]
+  disableXML = true
+  minifyOutput = true
