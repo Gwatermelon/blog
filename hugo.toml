@@ -41,8 +41,8 @@ hasCJKLanguage = true
   displayFullLangName = true
 
   [params.homeInfoParams]
-    Title = "你好，我是 Ge Zhang 👋"
-    Content = "这里是我的 AI 系统研究工作台，聚焦 **大模型推理中的投机推理加速**，并持续整理 AI 基础原理、推理系统与计算硬件。把论文读深，把实验做实，也把研究过程变成可复用的知识。"
+    Title = "Ge Zhang"
+    Content = ""
 
   [[params.socialIcons]]
     name = "github"

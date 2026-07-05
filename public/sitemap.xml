@@ -11,121 +11,22 @@
     <loc>https://blog-shf.pages.dev/research/leetcode/</loc>
   </url><url>
     <loc>https://blog-shf.pages.dev/categories/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
   </url><url>
     <loc>https://blog-shf.pages.dev/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/llm-inference/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/series/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E5%8A%A0%E9%80%9F/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/papers/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E8%AE%BA%E6%96%87%E7%A0%94%E8%AF%BB/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/papers/speculative-decoding/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/series/%E6%8A%95%E6%9C%BA%E6%8E%A8%E7%90%86/</loc>
-    <lastmod>2026-07-05T11:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/posts/hello-world/</loc>
-    <lastmod>2026-07-04T22:01:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/posts/</loc>
-    <lastmod>2026-07-04T22:01:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2026-07-04T22:01:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/series/%E5%BB%BA%E7%AB%99%E6%89%8B%E8%AE%B0/</loc>
-    <lastmod>2026-07-04T22:01:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/categories/%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2026-07-04T22:01:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E5%86%99%E4%BD%9C/</loc>
-    <lastmod>2026-07-04T22:01:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/papers/speculative-sampling/</loc>
-    <lastmod>2026-07-04T15:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E9%87%87%E6%A0%B7/</loc>
-    <lastmod>2026-07-04T15:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/posts/debugging-by-evidence/</loc>
-    <lastmod>2026-07-03T19:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E8%B0%83%E8%AF%95/</loc>
-    <lastmod>2026-07-03T19:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E5%B7%A5%E7%A8%8B%E6%96%B9%E6%B3%95/</loc>
-    <lastmod>2026-07-03T19:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/series/%E5%B7%A5%E7%A8%8B%E5%9F%BA%E6%9C%AC%E5%8A%9F/</loc>
-    <lastmod>2026-07-03T19:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/</loc>
-    <lastmod>2026-07-03T19:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</loc>
-    <lastmod>2026-07-03T19:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/medusa/</loc>
-    <lastmod>2026-07-03T09:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E5%A4%9Atoken%E9%A2%84%E6%B5%8B/</loc>
-    <lastmod>2026-07-03T09:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/papers/medusa/</loc>
-    <lastmod>2026-07-03T09:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/api/</loc>
-    <lastmod>2026-06-28T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/http/</loc>
-    <lastmod>2026-06-28T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/</loc>
-    <lastmod>2026-06-28T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2026-06-28T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/posts/api-design-notes/</loc>
-    <lastmod>2026-06-28T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/categories/%E6%88%90%E9%95%BF%E4%B8%8E%E6%95%88%E7%8E%87/</loc>
-    <lastmod>2026-06-20T14:20:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/posts/learning-system/</loc>
-    <lastmod>2026-06-20T14:20:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/</loc>
-    <lastmod>2026-06-20T14:20:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog-shf.pages.dev/tags/%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2026-06-20T14:20:00+08:00</lastmod>
   </url><url>
     <loc>https://blog-shf.pages.dev/todo/</loc>
   </url><url>
+    <loc>https://blog-shf.pages.dev/series/</loc>
+  </url><url>
+    <loc>https://blog-shf.pages.dev/tags/</loc>
+  </url><url>
     <loc>https://blog-shf.pages.dev/about/</loc>
   </url><url>
+    <loc>https://blog-shf.pages.dev/papers/</loc>
+  </url><url>
     <loc>https://blog-shf.pages.dev/search/</loc>
+  </url><url>
+    <loc>https://blog-shf.pages.dev/posts/</loc>
   </url><url>
     <loc>https://blog-shf.pages.dev/archives/</loc>
   </url><url>
