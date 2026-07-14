@@ -13,9 +13,6 @@ taskGroups:
       - id: "leetcode-longest-subarray"
         text: "最长 Subarray 如何写"
         note: "明确题目约束后整理滑动窗口或动态规划方法"
-      - id: "leetcode-n-queens"
-        text: "N 皇后"
-        note: "整理回溯、剪枝与状态表示"
   - title: "大模型推理加速"
     subtitle: "围绕投机推理与缓存机制回答关键问题"
     tasks:
@@ -36,4 +33,4 @@ taskGroups:
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
 ---
 
-这 7 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+这 6 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
