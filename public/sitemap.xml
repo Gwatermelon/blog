@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog-shf.pages.dev/leetcode/n-queens/</loc>
+    <lastmod>2026-07-14T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://blog-shf.pages.dev/categories/</loc>
     <lastmod>2026-07-14T00:00:00+00:00</lastmod>
   </url><url>
@@ -23,6 +26,9 @@
     <loc>https://blog-shf.pages.dev/tags/llm/</loc>
     <lastmod>2026-07-14T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://blog-shf.pages.dev/tags/n-%E7%9A%87%E5%90%8E/</loc>
+    <lastmod>2026-07-14T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://blog-shf.pages.dev/series/</loc>
     <lastmod>2026-07-14T00:00:00+00:00</lastmod>
   </url><url>
@@ -39,6 +45,9 @@
     <lastmod>2026-07-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog-shf.pages.dev/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</loc>
+    <lastmod>2026-07-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog-shf.pages.dev/tags/%E5%9B%9E%E6%BA%AF/</loc>
     <lastmod>2026-07-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog-shf.pages.dev/categories/%E8%AE%BA%E6%96%87%E7%A0%94%E8%AF%BB/</loc>
