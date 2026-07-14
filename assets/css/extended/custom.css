@@ -229,6 +229,7 @@ body {
 .todo-group h2 { margin: 0 0 5px; font-size: 22px; letter-spacing: -.025em; }
 .todo-group header p { margin: 0; color: var(--secondary); font-size: 14px; }
 .todo-items { padding: 8px 12px 12px; }
+.todo-item-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; border-radius: 12px; }
 .todo-item { display: grid; grid-template-columns: 24px 1fr; gap: 13px; align-items: start; padding: 15px 14px; border-radius: 12px; cursor: pointer; transition: background .18s ease; }
 .todo-item:hover { background: var(--accent-soft); }
 .todo-item input { position: absolute; opacity: 0; pointer-events: none; }
@@ -241,11 +242,30 @@ body {
 .todo-copy strong { color: var(--primary); font-size: 15px; line-height: 1.45; }
 .todo-copy small { color: var(--secondary); font-size: 13px; line-height: 1.55; }
 .todo-item input:checked ~ .todo-copy strong { color: var(--secondary); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.todo-delete { margin-right: 10px; padding: 7px 9px; color: var(--secondary); border: 0; border-radius: 8px; background: transparent; cursor: pointer; font-size: 12px; }
+.todo-delete:hover { color: #c53c4a; background: rgba(197, 60, 74, .09); }
 .research-scratchpad { margin-top: 24px; padding: 28px; border: 1px solid var(--border); border-radius: 18px; background: var(--entry); }
 .research-scratchpad h2 { margin: 6px 0 4px; }
 .research-scratchpad p { margin: 0 0 18px; color: var(--secondary); }
 .research-scratchpad textarea { width: 100%; resize: vertical; padding: 16px; color: var(--content); border: 1px solid var(--border); border-radius: 12px; outline: none; background: var(--theme); font: inherit; line-height: 1.7; }
 .research-scratchpad textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.todo-capture-form { display: grid; gap: 18px; }
+.todo-form-field { display: grid; gap: 8px; color: var(--primary); font-size: 14px; font-weight: 650; }
+.todo-form-field span small { color: var(--secondary); font-weight: 400; }
+.todo-form-field input { width: 100%; padding: 13px 15px; color: var(--content); border: 1px solid var(--border); border-radius: 12px; outline: none; background: var(--theme); font: inherit; }
+.todo-form-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.todo-type-fieldset { min-width: 0; padding: 0; border: 0; }
+.todo-type-fieldset legend { margin-bottom: 10px; color: var(--primary); font-size: 14px; font-weight: 650; }
+.todo-type-options { display: flex; flex-wrap: wrap; gap: 9px; }
+.todo-type-option { position: relative; cursor: pointer; }
+.todo-type-option input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.todo-type-option span { display: block; padding: 9px 13px; color: var(--secondary); border: 1px solid var(--border); border-radius: 99px; background: var(--theme); font-size: 13px; transition: .18s ease; }
+.todo-type-option input:checked + span { color: white; border-color: var(--accent); background: var(--accent); }
+.todo-type-option input:focus-visible + span { outline: 3px solid var(--accent-soft); outline-offset: 3px; }
+.todo-capture-actions { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; }
+#todo-add { padding: 11px 17px; color: white; border: 1px solid var(--accent); border-radius: 11px; background: var(--accent); cursor: pointer; font: inherit; font-size: 14px; font-weight: 700; line-height: 1.2; }
+#todo-add:hover { filter: brightness(1.06); }
+#todo-form-status { color: var(--secondary); font-size: 12px; }
 .scratchpad-footer { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 12px; color: var(--secondary); font-size: 12px; }
 #todo-reset { padding: 8px 12px; color: var(--secondary); border: 1px solid var(--border); border-radius: 9px; background: transparent; cursor: pointer; }
 #todo-reset:hover { color: var(--accent); border-color: var(--accent); }
@@ -321,5 +341,7 @@ body {
   .todo-group > header { padding-inline: 20px; }
   .todo-items { padding-inline: 6px; }
   .research-scratchpad, .paper-card { padding: 24px 20px; }
+  .todo-capture-actions { align-items: stretch; flex-direction: column; }
+  #todo-add { width: 100%; }
   .scratchpad-footer { align-items: flex-start; flex-direction: column; }
 }

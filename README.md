@@ -18,6 +18,10 @@ themes/      Hugo 主题
 hugo.toml    站点配置
 ```
 
+## 内容写作
+
+不熟悉 Hugo 或前端开发时，可以直接按照 [博客文章添加指南](docs/CONTENT_AUTHORING_GUIDE.md) 操作。指南提供普通文章、AI 基础原理、模型推理、论文研读和 LeetCode 五类可复制模板。
+
 ## 部署说明
 
 代码更新后由 Cloudflare Pages 构建并发布，线上站点以 <https://blog-shf.pages.dev> 的内容为准。
