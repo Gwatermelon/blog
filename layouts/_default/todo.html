@@ -13,71 +13,224 @@
 
   <div class="todo-intro post-content">{{ .Content }}</div>
   <div class="todo-grid">
-    {{- range .Params.taskGroups }}
-    <section class="todo-group">
-      <header><h2>{{ .title }}</h2><p>{{ .subtitle }}</p></header>
-      <div class="todo-items">
-        {{- range .tasks }}
-        <label class="todo-item" for="task-{{ .id }}">
-          <input type="checkbox" id="task-{{ .id }}" data-task-id="{{ .id }}">
-          <span class="todo-check" aria-hidden="true"></span>
-          <span class="todo-copy"><strong>{{ .text }}</strong>{{- with .note }}<small>{{ . }}</small>{{- end }}</span>
-        </label>
+    {{- range $groupIndex, $group := .Params.taskGroups }}
+    <section class="todo-group" data-todo-group="{{ $groupIndex }}">
+      <header><h2>{{ $group.title }}</h2><p>{{ $group.subtitle }}</p></header>
+      <div class="todo-items" data-todo-items>
+        {{- range $group.tasks }}
+        <div class="todo-item-row">
+          <label class="todo-item" for="task-{{ .id }}">
+            <input type="checkbox" id="task-{{ .id }}" data-task-id="{{ .id }}">
+            <span class="todo-check" aria-hidden="true"></span>
+            <span class="todo-copy"><strong>{{ .text }}</strong>{{- with .note }}<small>{{ . }}</small>{{- end }}</span>
+          </label>
+        </div>
         {{- end }}
       </div>
     </section>
     {{- end }}
   </div>
 
-  <section class="research-scratchpad">
-    <div><span class="todo-eyebrow">QUICK NOTES</span><h2>临时研究笔记</h2><p>记录今天冒出来的问题、实验现象或下一步假设。</p></div>
-    <textarea id="research-notes" rows="7" placeholder="例如：接受率下降是否来自温度设置，而不是草稿模型能力？"></textarea>
-    <div class="scratchpad-footer"><span id="notes-status">自动保存在当前浏览器</span><button type="button" id="todo-reset">重置勾选状态</button></div>
+  <section class="research-scratchpad todo-capture">
+    <div>
+      <span class="todo-eyebrow">QUICK CAPTURE</span>
+      <h2>添加研究事项</h2>
+      <p>填写要研究的内容，选择所属类型，然后直接加入上方 Todo 列表。</p>
+    </div>
+
+    <form id="todo-capture-form" class="todo-capture-form">
+      <label class="todo-form-field" for="new-todo-text">
+        <span>要研究什么</span>
+        <textarea id="new-todo-text" rows="3" maxlength="200" required placeholder="例如：分析 PagedAttention 如何降低 KV Cache 碎片"></textarea>
+      </label>
+
+      <label class="todo-form-field" for="new-todo-note">
+        <span>补充说明 <small>可选</small></span>
+        <input id="new-todo-note" type="text" maxlength="300" placeholder="例如：先阅读论文，再对照 vLLM 实现">
+      </label>
+
+      <fieldset class="todo-type-fieldset">
+        <legend>选择添加到哪个列表</legend>
+        <div class="todo-type-options">
+          {{- range $groupIndex, $group := .Params.taskGroups }}
+          <label class="todo-type-option">
+            <input type="radio" name="todo-group" value="{{ $groupIndex }}" {{ if eq $groupIndex 0 }}checked{{ end }}>
+            <span>{{ $group.title }}</span>
+          </label>
+          {{- end }}
+        </div>
+      </fieldset>
+
+      <div class="todo-capture-actions">
+        <button type="submit" id="todo-add">添加到 Todo 列表</button>
+        <span id="todo-form-status" role="status" aria-live="polite">新增事项保存在当前浏览器</span>
+      </div>
+    </form>
+
+    <div class="scratchpad-footer">
+      <span>自定义事项、分类和完成状态仅保存在当前设备的浏览器中</span>
+      <button type="button" id="todo-reset">重置全部勾选状态</button>
+    </div>
   </section>
 </article>
 
 <script>
 (() => {
-  const storageKey = 'gz-research-todo-v2';
-  const notesKey = 'gz-research-notes-v1';
-  const boxes = [...document.querySelectorAll('[data-task-id]')];
+  const stateKey = 'gz-research-todo-v2';
+  const customTasksKey = 'gz-research-custom-tasks-v1';
+  const legacyNotesKey = 'gz-research-notes-v1';
+  const groups = [...document.querySelectorAll('[data-todo-group]')];
   const progressText = document.getElementById('todo-progress-text');
   const progressBar = document.getElementById('todo-progress-bar');
-  const notes = document.getElementById('research-notes');
-  const notesStatus = document.getElementById('notes-status');
+  const form = document.getElementById('todo-capture-form');
+  const taskText = document.getElementById('new-todo-text');
+  const taskNote = document.getElementById('new-todo-note');
+  const formStatus = document.getElementById('todo-form-status');
+
   let saved = {};
-  try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
-  boxes.forEach(box => { box.checked = Boolean(saved[box.dataset.taskId]); });
-  notes.value = localStorage.getItem(notesKey) || '';
+  let customTasks = [];
+  try { saved = JSON.parse(localStorage.getItem(stateKey) || '{}'); } catch (_) {}
+  try { customTasks = JSON.parse(localStorage.getItem(customTasksKey) || '[]'); } catch (_) {}
+  if (!Array.isArray(customTasks)) customTasks = [];
+
+  function allBoxes() {
+    return [...document.querySelectorAll('[data-task-id]')];
+  }
+
+  function saveCustomTasks() {
+    localStorage.setItem(customTasksKey, JSON.stringify(customTasks));
+  }
+
+  function saveCheckedState() {
+    localStorage.setItem(stateKey, JSON.stringify(saved));
+  }
 
   function updateProgress() {
+    const boxes = allBoxes();
     const done = boxes.filter(box => box.checked).length;
     progressText.textContent = `${done} / ${boxes.length}`;
     progressBar.style.width = boxes.length ? `${done / boxes.length * 100}%` : '0%';
   }
 
-  boxes.forEach(box => box.addEventListener('change', () => {
-    saved[box.dataset.taskId] = box.checked;
-    localStorage.setItem(storageKey, JSON.stringify(saved));
-    updateProgress();
-  }));
+  function bindBox(box) {
+    box.checked = Boolean(saved[box.dataset.taskId]);
+    box.addEventListener('change', () => {
+      saved[box.dataset.taskId] = box.checked;
+      saveCheckedState();
+      updateProgress();
+    });
+  }
 
-  let noteTimer;
-  notes.addEventListener('input', () => {
-    notesStatus.textContent = '正在保存…';
-    clearTimeout(noteTimer);
-    noteTimer = setTimeout(() => {
-      localStorage.setItem(notesKey, notes.value);
-      notesStatus.textContent = '已保存到当前浏览器';
-    }, 300);
+  function buildCustomTask(task) {
+    const row = document.createElement('div');
+    row.className = 'todo-item-row todo-item-custom';
+    row.dataset.customTaskId = task.id;
+
+    const label = document.createElement('label');
+    label.className = 'todo-item';
+    label.htmlFor = `task-${task.id}`;
+
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.id = `task-${task.id}`;
+    box.dataset.taskId = task.id;
+
+    const check = document.createElement('span');
+    check.className = 'todo-check';
+    check.setAttribute('aria-hidden', 'true');
+
+    const copy = document.createElement('span');
+    copy.className = 'todo-copy';
+    const title = document.createElement('strong');
+    title.textContent = task.text;
+    copy.appendChild(title);
+    if (task.note) {
+      const note = document.createElement('small');
+      note.textContent = task.note;
+      copy.appendChild(note);
+    }
+
+    label.append(box, check, copy);
+
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'todo-delete';
+    remove.textContent = '删除';
+    remove.setAttribute('aria-label', `删除事项：${task.text}`);
+    remove.addEventListener('click', () => {
+      customTasks = customTasks.filter(item => item.id !== task.id);
+      delete saved[task.id];
+      saveCustomTasks();
+      saveCheckedState();
+      row.remove();
+      formStatus.textContent = '事项已删除';
+      updateProgress();
+    });
+
+    row.append(label, remove);
+    bindBox(box);
+    return row;
+  }
+
+  document.querySelectorAll('[data-task-id]').forEach(bindBox);
+
+  customTasks.forEach(task => {
+    const group = groups[Number(task.groupIndex)];
+    if (group) group.querySelector('[data-todo-items]').appendChild(buildCustomTask(task));
+  });
+
+  const legacyNotes = localStorage.getItem(legacyNotesKey);
+  if (legacyNotes && !taskText.value) {
+    taskText.value = legacyNotes;
+    formStatus.textContent = '已载入之前的临时研究笔记，请选择分类后添加';
+  }
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const text = taskText.value.trim();
+    const note = taskNote.value.trim();
+    const selected = form.querySelector('input[name="todo-group"]:checked');
+    const groupIndex = selected ? Number(selected.value) : 0;
+    const group = groups[groupIndex];
+
+    if (!text) {
+      formStatus.textContent = '请先填写要研究的内容';
+      taskText.focus();
+      return;
+    }
+    if (!group) {
+      formStatus.textContent = '请选择有效的事项类型';
+      return;
+    }
+
+    const randomPart = window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
+    const task = {
+      id: `custom-${Date.now()}-${randomPart}`,
+      groupIndex,
+      text,
+      note,
+      createdAt: new Date().toISOString()
+    };
+
+    customTasks.push(task);
+    saveCustomTasks();
+    group.querySelector('[data-todo-items]').appendChild(buildCustomTask(task));
+    localStorage.removeItem(legacyNotesKey);
+    taskText.value = '';
+    taskNote.value = '';
+    formStatus.textContent = `已添加到「${group.querySelector('h2').textContent}」`;
+    taskText.focus();
+    updateProgress();
   });
 
   document.getElementById('todo-reset').addEventListener('click', () => {
-    boxes.forEach(box => { box.checked = false; });
+    allBoxes().forEach(box => { box.checked = false; });
     saved = {};
-    localStorage.removeItem(storageKey);
+    localStorage.removeItem(stateKey);
+    formStatus.textContent = '全部勾选状态已重置';
     updateProgress();
   });
+
   updateProgress();
 })();
 </script>
