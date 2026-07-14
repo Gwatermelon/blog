@@ -1,0 +1,61 @@
+{{- define "main" }}
+
+<header class="page-header article-feed-header">
+  {{- partial "breadcrumbs.html" . }}
+  <span class="todo-eyebrow">LATEST WRITING</span>
+  <h1>{{ .Title }}</h1>
+  {{- with .Description }}<div class="post-description">{{ . | markdownify }}</div>{{- end }}
+</header>
+
+{{- with .Content }}
+<div class="post-content md-content">{{ . }}</div>
+{{- end }}
+
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $pages = $pages.ByDate.Reverse }}
+{{- $paginator := .Paginate $pages 10 }}
+
+<div class="article-feed" aria-label="全站文章列表">
+  {{- range $paginator.Pages }}
+  <article class="post-entry article-feed-entry">
+    <div class="article-feed-source">
+      {{- with .CurrentSection }}<span>{{ .Title }}</span>{{- end }}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+    </div>
+    <header class="entry-header">
+      <h2 class="entry-hint-parent">{{ .Title }}</h2>
+    </header>
+    {{- if ne (.Param "hideSummary") true }}
+    <div class="entry-content">
+      <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+    </div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <footer class="entry-footer">{{ partial "post_meta.html" . }}</footer>
+    {{- end }}
+    <a class="entry-link" aria-label="阅读 {{ .Title | plainify }}" href="{{ .RelPermalink }}"></a>
+  </article>
+  {{- end }}
+</div>
+
+{{- if gt $paginator.TotalPages 1 }}
+<footer class="page-footer article-page-footer">
+  <nav class="pagination pagination-numbered" aria-label="文章分页">
+    {{- if $paginator.HasPrev }}
+    <a class="pagination-control" href="{{ $paginator.Prev.URL }}" aria-label="上一页">‹</a>
+    {{- end }}
+    {{- range $paginator.Pagers }}
+      {{- if eq .PageNumber $paginator.PageNumber }}
+      <span class="pagination-number current" aria-current="page">{{ .PageNumber }}</span>
+      {{- else }}
+      <a class="pagination-number" href="{{ .URL }}" aria-label="第 {{ .PageNumber }} 页">{{ .PageNumber }}</a>
+      {{- end }}
+    {{- end }}
+    {{- if $paginator.HasNext }}
+    <a class="pagination-control" href="{{ $paginator.Next.URL }}" aria-label="下一页">›</a>
+    {{- end }}
+  </nav>
+</footer>
+{{- end }}
+
+{{- end }}

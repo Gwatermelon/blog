@@ -264,6 +264,58 @@ body {
 .paper-card footer { display: flex; gap: 18px; margin-top: 20px; }
 .paper-card footer a { color: var(--accent); font-size: 13px; font-weight: 650; }
 
+/* Cross-section article feed */
+.article-feed-header { margin-bottom: 28px; }
+.article-feed-header .todo-eyebrow { display: block; margin-bottom: 10px; }
+.article-feed { display: grid; gap: 18px; }
+.article-feed-entry { width: 100%; margin: 0; }
+.article-feed-source {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: var(--secondary);
+  font-size: 12px;
+}
+.article-feed-source span {
+  padding: 4px 9px;
+  color: var(--accent);
+  border-radius: 99px;
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+.article-page-footer { margin-top: 32px; }
+.pagination.pagination-numbered {
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.pagination.pagination-numbered a,
+.pagination.pagination-numbered span {
+  display: inline-grid;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 11px;
+  place-items: center;
+  color: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--entry);
+  font-size: 13px;
+  line-height: 1;
+}
+.pagination.pagination-numbered a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.pagination.pagination-numbered .current {
+  color: white;
+  border-color: var(--accent);
+  background: var(--accent);
+  font-weight: 750;
+}
+
 @media (max-width: 700px) {
   .todo-hero, .paper-library-header { padding: 30px 24px; border-radius: 20px; }
   .todo-group > header { padding-inline: 20px; }

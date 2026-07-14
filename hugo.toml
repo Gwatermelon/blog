@@ -27,7 +27,7 @@ hasCJKLanguage = true
   defaultTheme = "auto"
   disableThemeToggle = false
   DateFormat = "2006 年 01 月 02 日"
-  mainSections = ["posts"]
+  mainSections = ["posts", "ai-fundamentals", "model-inference", "papers", "leetcode"]
   ShowReadingTime = true
   ShowWordCount = true
   ShowBreadCrumbs = true
@@ -72,35 +72,45 @@ hasCJKLanguage = true
   url = "/posts/"
   weight = 10
 [[menu.main]]
-  identifier = "research"
-  name = "研究专题"
-  url = "/research/"
+  identifier = "ai-fundamentals"
+  name = "AI 基础原理"
+  url = "/ai-fundamentals/"
   weight = 20
+[[menu.main]]
+  identifier = "model-inference"
+  name = "模型推理"
+  url = "/model-inference/"
+  weight = 30
 [[menu.main]]
   identifier = "papers"
   name = "论文研读"
   url = "/papers/"
-  weight = 30
+  weight = 40
+[[menu.main]]
+  identifier = "leetcode"
+  name = "LeetCode"
+  url = "/leetcode/"
+  weight = 50
 [[menu.main]]
   identifier = "todo"
   name = "Todo"
   url = "/todo/"
-  weight = 40
+  weight = 60
 [[menu.main]]
   identifier = "archives"
   name = "归档"
   url = "/archives/"
-  weight = 50
+  weight = 70
 [[menu.main]]
   identifier = "about"
   name = "关于"
   url = "/about/"
-  weight = 60
+  weight = 80
 [[menu.main]]
   identifier = "search"
   name = "搜索"
   url = "/search/"
-  weight = 70
+  weight = 90
 
 [minify]
   disableXML = true
