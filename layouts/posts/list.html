@@ -2,7 +2,7 @@
 
 <header class="page-header article-feed-header">
   {{- partial "breadcrumbs.html" . }}
-  <span class="todo-eyebrow">LATEST WRITING</span>
+  <span class="todo-eyebrow">ARTICLE ARCHIVE</span>
   <h1>{{ .Title }}</h1>
   {{- with .Description }}<div class="post-description">{{ . | markdownify }}</div>{{- end }}
 </header>
@@ -15,7 +15,7 @@
 {{- $pages = $pages.ByDate.Reverse }}
 {{- $paginator := .Paginate $pages 10 }}
 
-<div class="article-feed" aria-label="全站文章列表">
+<div class="article-feed" aria-label="全站文章归档列表">
   {{- range $paginator.Pages }}
   <article class="post-entry article-feed-entry">
     <div class="article-feed-source">
