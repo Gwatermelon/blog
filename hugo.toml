@@ -68,7 +68,7 @@ hasCJKLanguage = true
 
 [[menu.main]]
   identifier = "posts"
-  name = "文章"
+  name = "文章归档"
   url = "/posts/"
   weight = 10
 [[menu.main]]
@@ -97,20 +97,15 @@ hasCJKLanguage = true
   url = "/todo/"
   weight = 60
 [[menu.main]]
-  identifier = "archives"
-  name = "归档"
-  url = "/archives/"
-  weight = 70
-[[menu.main]]
   identifier = "about"
   name = "关于"
   url = "/about/"
-  weight = 80
+  weight = 70
 [[menu.main]]
   identifier = "search"
   name = "搜索"
   url = "/search/"
-  weight = 90
+  weight = 80
 
 [minify]
   disableXML = true
