@@ -6,7 +6,22 @@
     <description>Recent content on Ge Zhang · 技术笔记</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
+    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://blog-shf.pages.dev/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LCR 053. 二叉搜索树中的中序后继</title>
+      <link>https://blog-shf.pages.dev/leetcode/inorder-successor-in-bst/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/leetcode/inorder-successor-in-bst/</guid>
+      <description>记录二叉搜索树中序后继问题的三种写法：中序遍历记录节点、遍历全树维护候选答案，以及利用 BST 性质迭代查找。</description>
+    </item>
+    <item>
+      <title>Token Recycling：把被丢弃的候选 Token 变成下一轮草稿</title>
+      <link>https://blog-shf.pages.dev/papers/token-recycling/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/papers/token-recycling/</guid>
+      <description>无需训练草稿模型，Token Recycling 用一个不到 2 MiB 的邻接矩阵回收目标模型已经算出的 top-k 候选，并通过草稿树与 Tree Attention 加速解码。</description>
+    </item>
     <item>
       <title>Research Todo</title>
       <link>https://blog-shf.pages.dev/todo/</link>

@@ -6,6 +6,56 @@
     <description>Recent content in Tags on Ge Zhang · 技术笔记</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
+    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://blog-shf.pages.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM</title>
+      <link>https://blog-shf.pages.dev/tags/llm/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Token Recycling</title>
+      <link>https://blog-shf.pages.dev/tags/token-recycling/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/token-recycling/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>二叉搜索树</title>
+      <link>https://blog-shf.pages.dev/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>算法题</title>
+      <link>https://blog-shf.pages.dev/tags/%E7%AE%97%E6%B3%95%E9%A2%98/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/%E7%AE%97%E6%B3%95%E9%A2%98/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>投机解码</title>
+      <link>https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/%E6%8A%95%E6%9C%BA%E8%A7%A3%E7%A0%81/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>推理加速</title>
+      <link>https://blog-shf.pages.dev/tags/%E6%8E%A8%E7%90%86%E5%8A%A0%E9%80%9F/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/%E6%8E%A8%E7%90%86%E5%8A%A0%E9%80%9F/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>中序遍历</title>
+      <link>https://blog-shf.pages.dev/tags/%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/tags/%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

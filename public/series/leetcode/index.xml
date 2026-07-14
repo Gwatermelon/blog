@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>LeetCode on Ge Zhang · 技术笔记</title>
+    <link>https://blog-shf.pages.dev/series/leetcode/</link>
+    <description>Recent content in LeetCode on Ge Zhang · 技术笔记</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://blog-shf.pages.dev/series/leetcode/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LCR 053. 二叉搜索树中的中序后继</title>
+      <link>https://blog-shf.pages.dev/leetcode/inorder-successor-in-bst/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/leetcode/inorder-successor-in-bst/</guid>
+      <description>记录二叉搜索树中序后继问题的三种写法：中序遍历记录节点、遍历全树维护候选答案，以及利用 BST 性质迭代查找。</description>
+    </item>
+  </channel>
+</rss>
