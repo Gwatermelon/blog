@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>双向链表 on Ge Zhang · 技术笔记</title>
+    <link>https://blog-shf.pages.dev/tags/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/</link>
+    <description>Recent content in 双向链表 on Ge Zhang · 技术笔记</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://blog-shf.pages.dev/tags/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>146. LRU 缓存</title>
+      <link>https://blog-shf.pages.dev/leetcode/lru-cache/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/leetcode/lru-cache/</guid>
+      <description>记录 LRU 缓存的经典实现：哈希表负责 O(1) 查找，双向链表负责维护最近使用顺序。</description>
+    </item>
+  </channel>
+</rss>

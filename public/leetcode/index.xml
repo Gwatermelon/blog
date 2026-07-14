@@ -9,6 +9,13 @@
     <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://blog-shf.pages.dev/leetcode/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>146. LRU 缓存</title>
+      <link>https://blog-shf.pages.dev/leetcode/lru-cache/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/leetcode/lru-cache/</guid>
+      <description>记录 LRU 缓存的经典实现：哈希表负责 O(1) 查找，双向链表负责维护最近使用顺序。</description>
+    </item>
+    <item>
       <title>51. N 皇后</title>
       <link>https://blog-shf.pages.dev/leetcode/n-queens/</link>
       <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
