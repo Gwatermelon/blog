@@ -22,6 +22,7 @@
           <label class="todo-item" for="task-{{ .id }}">
             <input type="checkbox" id="task-{{ .id }}" data-task-id="{{ .id }}">
             <span class="todo-check" aria-hidden="true"></span>
+            <span class="todo-number" aria-hidden="true"></span>
             <span class="todo-copy"><strong>{{ .text }}</strong>{{- with .note }}<small>{{ . }}</small>{{- end }}</span>
           </label>
         </div>
@@ -105,11 +106,19 @@
     localStorage.setItem(stateKey, JSON.stringify(saved));
   }
 
+  function updateTaskNumbers() {
+    document.querySelectorAll('.todo-item-row').forEach((row, index) => {
+      const number = row.querySelector('.todo-number');
+      if (number) number.textContent = index + 1;
+    });
+  }
+
   function updateProgress() {
     const boxes = allBoxes();
     const done = boxes.filter(box => box.checked).length;
     progressText.textContent = `${done} / ${boxes.length}`;
     progressBar.style.width = boxes.length ? `${done / boxes.length * 100}%` : '0%';
+    updateTaskNumbers();
   }
 
   function bindBox(box) {
@@ -139,6 +148,10 @@
     check.className = 'todo-check';
     check.setAttribute('aria-hidden', 'true');
 
+    const number = document.createElement('span');
+    number.className = 'todo-number';
+    number.setAttribute('aria-hidden', 'true');
+
     const copy = document.createElement('span');
     copy.className = 'todo-copy';
     const title = document.createElement('strong');
@@ -150,7 +163,7 @@
       copy.appendChild(note);
     }
 
-    label.append(box, check, copy);
+    label.append(box, check, number, copy);
 
     const remove = document.createElement('button');
     remove.type = 'button';

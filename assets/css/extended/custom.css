@@ -230,7 +230,7 @@ body {
 .todo-group header p { margin: 0; color: var(--secondary); font-size: 14px; }
 .todo-items { padding: 8px 12px 12px; }
 .todo-item-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; border-radius: 12px; }
-.todo-item { display: grid; grid-template-columns: 24px 1fr; gap: 13px; align-items: start; padding: 15px 14px; border-radius: 12px; cursor: pointer; transition: background .18s ease; }
+.todo-item { display: grid; grid-template-columns: 24px 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 15px 14px; border-radius: 12px; cursor: pointer; transition: background .18s ease; }
 .todo-item:hover { background: var(--accent-soft); }
 .todo-item input { position: absolute; opacity: 0; pointer-events: none; }
 .todo-check { display: grid; width: 22px; height: 22px; margin-top: 1px; place-items: center; border: 2px solid var(--border); border-radius: 7px; background: var(--theme); transition: .18s ease; }
@@ -238,6 +238,7 @@ body {
 .todo-item input:checked + .todo-check { border-color: var(--accent); background: var(--accent); }
 .todo-item input:checked + .todo-check::after { opacity: 1; transform: translateY(-1px) rotate(-45deg) scale(1); }
 .todo-item input:focus-visible + .todo-check { outline: 3px solid var(--accent-soft); outline-offset: 3px; }
+.todo-number { display: grid; min-width: 28px; height: 22px; place-items: center; color: var(--secondary); font-size: 13px; font-variant-numeric: tabular-nums; line-height: 1; }
 .todo-copy { display: grid; gap: 4px; }
 .todo-copy strong { color: var(--primary); font-size: 15px; line-height: 1.45; }
 .todo-copy small { color: var(--secondary); font-size: 13px; line-height: 1.55; }

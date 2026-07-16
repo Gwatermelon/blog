@@ -27,7 +27,7 @@ hasCJKLanguage = true
   defaultTheme = "auto"
   disableThemeToggle = false
   DateFormat = "2006 年 01 月 02 日"
-  mainSections = ["posts", "ai-fundamentals", "model-inference", "papers", "leetcode"]
+  mainSections = ["posts", "ai-fundamentals", "model-inference", "papers", "math", "leetcode"]
   ShowReadingTime = true
   ShowWordCount = true
   ShowBreadCrumbs = true
@@ -87,25 +87,30 @@ hasCJKLanguage = true
   url = "/papers/"
   weight = 40
 [[menu.main]]
+  identifier = "math"
+  name = "数学知识"
+  url = "/math/"
+  weight = 50
+[[menu.main]]
   identifier = "leetcode"
   name = "LeetCode"
   url = "/leetcode/"
-  weight = 50
+  weight = 60
 [[menu.main]]
   identifier = "todo"
   name = "Todo"
   url = "/todo/"
-  weight = 60
+  weight = 70
 [[menu.main]]
   identifier = "about"
   name = "关于"
   url = "/about/"
-  weight = 70
+  weight = 80
 [[menu.main]]
   identifier = "search"
   name = "搜索"
   url = "/search/"
-  weight = 80
+  weight = 90
 
 [minify]
   disableXML = true
