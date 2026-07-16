@@ -1,6 +1,6 @@
 ---
 title: "Research Todo"
-description: "记录当前真正需要推进的算法题、推理加速问题和算子实现任务。"
+description: "记录当前真正需要推进的算法题、数学知识、推理加速问题和算子实现任务。"
 layout: "todo"
 ShowToc: false
 taskGroups:
@@ -16,12 +16,15 @@ taskGroups:
   - title: "大模型推理加速"
     subtitle: "围绕投机推理与缓存机制回答关键问题"
     tasks:
-      - id: "inference-dflash-vs-eagle3"
-        text: "DFlash 为什么比 EAGLE-3 推理快"
-        note: "从算法路径、接受长度与系统开销进行对比"
       - id: "inference-qkv-kv-cache"
         text: "QKV 为什么只有 KV Cache"
         note: "从自回归注意力中的复用关系讲清楚原因"
+  - title: "数学知识"
+    subtitle: "整理数学概念的直觉、推导与应用"
+    tasks:
+      - id: "math-taylor-expansion"
+        text: "泰勒展开"
+        note: "梳理展开公式、余项、收敛条件与常见函数示例"
   - title: "算子实现与优化"
     subtitle: "从数学定义走到面向硬件的高效实现"
     tasks:
