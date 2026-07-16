@@ -1,6 +1,7 @@
 ---
 title: "为什么 DFlash 比 EAGLE-3 推理更快？"
 date: 2026-07-15
+lastmod: 2026-07-15
 draft: false
 description: "从 EAGLE 系列的自回归草稿模型出发，拆解 DFlash 如何利用块扩散并行生成草稿，并解释更深的草稿网络为何仍能获得更低延迟。"
 summary: "DFlash 的关键并不只是增加模型层数，而是把跨 token 的串行草稿改造成一次前向中的块级并行预测。"

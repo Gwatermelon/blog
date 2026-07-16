@@ -1,8 +1,11 @@
 ---
 title: "Research Todo"
+date: 2026-07-16
+lastmod: 2026-07-16
 description: "记录当前真正需要推进的算法题、数学知识、推理加速问题和算子实现任务。"
 layout: "todo"
 ShowToc: false
+robotsNoIndex: true
 taskGroups:
   - title: "LeetCode 算法题"
     subtitle: "完成解题、复杂度分析与过程复盘"

@@ -1,10 +1,14 @@
 ---
 title: "146. LRU 缓存"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: false
 description: "记录 LRU 缓存的经典实现：哈希表负责 O(1) 查找，双向链表负责维护最近使用顺序。"
+summary: "用哈希表和双向链表实现 O(1) 的查询、更新与淘汰，并梳理哨兵节点和边界处理。"
 categories: ["LeetCode"]
 tags: ["哈希表", "双向链表", "LRU", "算法题"]
+ShowToc: true
+TocOpen: true
 series: ["LeetCode"]
 ---
 

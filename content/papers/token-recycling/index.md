@@ -1,6 +1,7 @@
 ---
 title: "Token Recycling：把被丢弃的候选 Token 变成下一轮草稿"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: false
 description: "无需训练草稿模型，Token Recycling 用一个不到 2 MiB 的邻接矩阵回收目标模型已经算出的 top-k 候选，并通过草稿树与 Tree Attention 加速解码。"
 summary: "Token Recycling 不额外训练 draft model，而是保存目标模型验证时产生的 top-k 候选，用轻量邻接矩阵构造草稿树，再通过 Tree Attention 一次验证多条路径。"

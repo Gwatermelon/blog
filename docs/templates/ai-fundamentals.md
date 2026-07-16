@@ -1,6 +1,7 @@
 ---
 title: "替换为 AI 基础主题"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: true
 description: "说明本文要讲清楚的 AI 基础概念。"
 summary: "文章归档列表中显示的简短摘要。"

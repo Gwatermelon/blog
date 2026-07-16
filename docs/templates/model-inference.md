@@ -1,6 +1,7 @@
 ---
 title: "替换为模型推理主题"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: true
 description: "说明本文关注的推理问题或性能瓶颈。"
 summary: "文章归档列表中显示的简短摘要。"

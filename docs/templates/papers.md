@@ -1,6 +1,7 @@
 ---
 title: "替换为论文标题与中文概括"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: true
 description: "用一两句话概括论文解决的问题和方法。"
 summary: "论文研读列表中显示的简短摘要。"

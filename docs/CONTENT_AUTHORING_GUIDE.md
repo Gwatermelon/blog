@@ -103,6 +103,7 @@ Copy-Item "docs\templates\leetcode.md" "content\leetcode\two-sum\index.md"
 ---
 title: "文章标题"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: false
 description: "用一两句话说明文章解决什么问题。"
 summary: "文章归档列表中显示的简短摘要。"
@@ -119,6 +120,7 @@ TocOpen: true
 | --- | --- |
 | `title` | 页面显示的文章标题 |
 | `date` | `年-月-日`，例如 `2026-07-14` |
+| `lastmod` | 最后一次实质修改日期，格式与 `date` 相同 |
 | `draft` | `false` 表示发布；`true` 表示草稿 |
 | `description` | 搜索引擎和文章顶部使用的简介 |
 | `summary` | 文章归档卡片中的摘要 |
@@ -203,7 +205,7 @@ paperUrl: "https://arxiv.org/abs/xxxx.xxxxx"
 
 ## 8. 本地预览
 
-Windows 可以使用官方 Winget 包安装 Hugo Extended：
+项目要求的 Hugo Extended 版本记录在根目录 `.hugo-version`。Windows 可以使用官方 Winget 包安装，并确认本机版本与该文件一致：
 
 ```powershell
 winget install Hugo.Hugo.Extended
@@ -226,11 +228,20 @@ http://localhost:1313
 
 结束预览时，在终端按 `Ctrl + C`。
 
+正式构建和内容校验：
+
+```powershell
+hugo --cleanDestinationDir --gc --minify --panicOnWarning
+powershell -ExecutionPolicy Bypass -File scripts\validate-site.ps1 -PublicDir public
+```
+
+`public/` 是本地生成目录，已被 Git 忽略，不需要手动修改或提交。
+
 ## 9. 发布前检查
 
 - [ ] 文章位于正确的模块目录；
 - [ ] 文件名为 `index.md`；
-- [ ] `title`、`date`、`description` 和 `summary` 已替换；
+- [ ] `title`、`date`、`lastmod`、`description` 和 `summary` 已替换；
 - [ ] `draft` 已设置为 `false`；
 - [ ] 图片和链接可以打开；
 - [ ] Python 代码块使用了 `python` 标记；

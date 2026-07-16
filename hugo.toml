@@ -3,6 +3,7 @@ locale = "zh-CN"
 defaultContentLanguage = "zh"
 title = "Ge Zhang · 技术笔记"
 theme = "PaperMod"
+copyright = "© 2026 Ge Zhang"
 enableRobotsTXT = true
 enableEmoji = true
 hasCJKLanguage = true
@@ -24,6 +25,7 @@ hasCJKLanguage = true
   description = "聚焦 AI 基础、大模型推理加速、投机推理与计算硬件的个人技术博客"
   author = "Ge Zhang"
   keywords = ["技术博客", "人工智能", "大模型推理", "投机推理", "AI 硬件"]
+  images = ["/images/site-card.png"]
   defaultTheme = "auto"
   disableThemeToggle = false
   DateFormat = "2006 年 01 月 02 日"
@@ -56,6 +58,17 @@ hasCJKLanguage = true
 
   [params.assets]
     disableHLJS = true
+    favicon = "favicon.ico"
+    favicon16x16 = "favicon-16x16.png"
+    favicon32x32 = "favicon-32x32.png"
+    apple_touch_icon = "apple-touch-icon.png"
+    safari_pinned_tab = "safari-pinned-tab.svg"
+    theme_color = "#14213d"
+    msapplication_TileColor = "#14213d"
+
+  [params.schema]
+    publisherType = "Person"
+    sameAs = ["https://github.com/Gwatermelon"]
 
 [markup]
   [markup.highlight]
@@ -64,7 +77,7 @@ hasCJKLanguage = true
     guessSyntax = true
     lineNos = false
   [markup.goldmark.renderer]
-    unsafe = true
+    unsafe = false
 
 [[menu.main]]
   identifier = "posts"

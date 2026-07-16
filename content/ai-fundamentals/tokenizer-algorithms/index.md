@@ -1,6 +1,7 @@
 ---
 title: "Tokenizer 基础：从文本到 Token ID"
 date: 2026-07-15
+lastmod: 2026-07-15
 draft: false
 description: "系统梳理 Tokenizer 的处理流水线，以及词级、字符级、BPE、WordPiece、Unigram 和字节级 BPE 的原理、取舍与常见误区。"
 summary: "Tokenizer 不只是切词：它要在词表大小、序列长度、开放词汇与多语言覆盖之间权衡。本文用例子和一份可运行的 BPE 实现讲清主流算法。"

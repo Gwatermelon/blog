@@ -1,10 +1,14 @@
 ---
 title: "LCR 053. 二叉搜索树中的中序后继"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: false
 description: "记录二叉搜索树中序后继问题的三种写法：中序遍历记录节点、遍历全树维护候选答案，以及利用 BST 性质迭代查找。"
+summary: "从完整中序遍历到利用 BST 有序性质的迭代查找，比较三种中序后继解法及其复杂度。"
 categories: ["LeetCode"]
 tags: ["二叉搜索树", "中序遍历", "算法题"]
+ShowToc: true
+TocOpen: true
 series: ["LeetCode"]
 ---
 

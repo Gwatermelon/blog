@@ -1,0 +1,46 @@
+name: Validate site
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install pinned Hugo Extended
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(tr -d '\r\n' < .hugo-version)"
+          asset="hugo_extended_${version}_linux-amd64.tar.gz"
+          base="https://github.com/gohugoio/hugo/releases/download/v${version}"
+          curl --fail --location --silent --show-error "${base}/${asset}" --output "${RUNNER_TEMP}/${asset}"
+          curl --fail --location --silent --show-error "${base}/hugo_${version}_checksums.txt" --output "${RUNNER_TEMP}/checksums.txt"
+          cd "${RUNNER_TEMP}"
+          grep " ${asset}$" checksums.txt | sha256sum --check --strict
+          tar --extract --gzip --file "${asset}" hugo
+          sudo install hugo /usr/local/bin/hugo
+          hugo version
+
+      - name: Validate source content
+        shell: pwsh
+        run: ./scripts/validate-site.ps1
+
+      - name: Build production site
+        run: hugo --cleanDestinationDir --gc --minify --panicOnWarning
+
+      - name: Validate generated site
+        shell: pwsh
+        run: ./scripts/validate-site.ps1 -PublicDir public

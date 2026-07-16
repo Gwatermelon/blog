@@ -1,10 +1,14 @@
 ---
 title: "51. N 皇后"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: false
 description: "记录 N 皇后问题的经典回溯写法：按行放置皇后，检查列和两条对角线是否合法，并在回溯时恢复棋盘状态。"
+summary: "按行回溯放置皇后，用列和两条对角线集合完成常数时间冲突检测。"
 categories: ["LeetCode"]
 tags: ["回溯", "N 皇后", "算法题"]
+ShowToc: true
+TocOpen: true
 series: ["LeetCode"]
 ---
 

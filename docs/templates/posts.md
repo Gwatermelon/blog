@@ -1,6 +1,7 @@
 ---
 title: "替换为文章标题"
 date: 2026-07-14
+lastmod: 2026-07-14
 draft: true
 description: "用一两句话说明文章解决什么问题。"
 summary: "文章归档列表中显示的简短摘要。"
