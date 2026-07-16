@@ -6,8 +6,15 @@
     <description>Recent content in LLM on Ge Zhang · 技术笔记</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://blog-shf.pages.dev/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tokenizer 基础：从文本到 Token ID</title>
+      <link>https://blog-shf.pages.dev/ai-fundamentals/tokenizer-algorithms/</link>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://blog-shf.pages.dev/ai-fundamentals/tokenizer-algorithms/</guid>
+      <description>系统梳理 Tokenizer 的处理流水线，以及词级、字符级、BPE、WordPiece、Unigram 和字节级 BPE 的原理、取舍与常见误区。</description>
+    </item>
     <item>
       <title>Token Recycling：把被丢弃的候选 Token 变成下一轮草稿</title>
       <link>https://blog-shf.pages.dev/papers/token-recycling/</link>
