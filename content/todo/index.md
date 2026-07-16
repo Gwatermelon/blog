@@ -19,12 +19,6 @@ taskGroups:
       - id: "inference-qkv-kv-cache"
         text: "QKV 为什么只有 KV Cache"
         note: "从自回归注意力中的复用关系讲清楚原因"
-  - title: "数学知识"
-    subtitle: "整理数学概念的直觉、推导与应用"
-    tasks:
-      - id: "math-taylor-expansion"
-        text: "泰勒展开"
-        note: "梳理展开公式、余项、收敛条件与常见函数示例"
   - title: "算子实现与优化"
     subtitle: "从数学定义走到面向硬件的高效实现"
     tasks:
@@ -36,4 +30,4 @@ taskGroups:
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
 ---
 
-这 6 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+这 5 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
