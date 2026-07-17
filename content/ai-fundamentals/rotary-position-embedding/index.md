@@ -47,7 +47,12 @@ $$
 
 三角函数式位置编码通常也称为 Sinusoidal 位置编码，是论文《Attention Is All You Need》提出的显式方案：
 
-![Sinusoidal 位置编码公式](rope-02.png)
+$$
+\begin{aligned}
+p_{k,2i} &= \sin\left(\frac{k}{10000^{2i/d}}\right),\\
+p_{k,2i+1} &= \cos\left(\frac{k}{10000^{2i/d}}\right).
+\end{aligned}
+$$
 
 其中，$p_{k,2i}$ 和 $p_{k,2i+1}$ 分别是位置 $k$ 的编码向量中第 $2i$、$2i+1$ 个分量，$d$ 是位置向量的维度。
 
@@ -86,11 +91,35 @@ $$
 
 因此，完整的位置编码可以写成：
 
-![维度为 8 时的完整 Sinusoidal 位置编码](rope-03.png)
+$$
+p_k=
+\begin{bmatrix}
+\sin\left(k/10000^{0/8}\right)\\
+\cos\left(k/10000^{0/8}\right)\\
+\sin\left(k/10000^{2/8}\right)\\
+\cos\left(k/10000^{2/8}\right)\\
+\sin\left(k/10000^{4/8}\right)\\
+\cos\left(k/10000^{4/8}\right)\\
+\sin\left(k/10000^{6/8}\right)\\
+\cos\left(k/10000^{6/8}\right)
+\end{bmatrix}.
+$$
 
-等价于：
+把幂次化简后，等价于：
 
-![维度为 8 时不同频率的等价写法](rope-04.png)
+$$
+p_k=
+\begin{bmatrix}
+\sin(k)\\
+\cos(k)\\
+\sin(k/10)\\
+\cos(k/10)\\
+\sin(k/100)\\
+\cos(k/100)\\
+\sin(k/1000)\\
+\cos(k/1000)
+\end{bmatrix}.
+$$
 
 可以看到，不同的 $i$ 对应不同的变化频率：
 
@@ -158,15 +187,20 @@ $$
 
 设加入位置后的 Query 和 Key 为：
 
-![分别为 Query 和 Key 编入绝对位置](rope-05.png)
+$$
+\tilde{q}_m=f(q,m),
+\qquad
+\tilde{k}_n=f(k,n).
+$$
 
-文档中的例子可以概括为：原始 Query、Key 负责语义信息，函数 $f$ 再分别将位置 $m$、$n$ 编入它们。
-
-![Query、Key 与各自位置的说明](rope-06.png)
+原始向量 $q$、$k$ 负责承载语义信息，函数 $f$ 再分别将位置 $m$、$n$ 编入它们。此时，$\tilde{q}_m$ 表示位于位置 $m$ 的 Query，$\tilde{k}_n$ 表示位于位置 $n$ 的 Key。
 
 Attention 真正使用的是 Query 和 Key 的内积，因此希望结果满足：
 
-![内积只依赖相对位置的目标](rope-07.png)
+$$
+\left\langle f(q,m),f(k,n)\right\rangle
+=g(q,k,m-n).
+$$
 
 右侧函数 $g$ 只接收原始语义向量 $q$、$k$ 和相对位置 $m-n$，不再分别依赖 $m$ 与 $n$。
 
@@ -182,9 +216,7 @@ $$
 
 如果满足上面的关系，这两组绝对位置就具有相同的相对位置结构。模型关心的是“Query 在 Key 后面 3 个位置”，而不是它们分别位于第 10、7 或第 100、97 个位置。
 
-“用绝对位置编码实现相对位置编码”可以概括为：
-
-![分别编码绝对位置，再通过内积得到相对位置](rope-08.png)
+“用绝对位置编码实现相对位置编码”可以概括为：先分别对 Query 和 Key 编入绝对位置，再利用二者的内积自然得到相对位置。
 
 可以用钟表指针来类比。假设 Query 根据位置 $m$ 旋转到角度 $m\theta$，Key 根据位置 $n$ 旋转到角度 $n\theta$。每根指针的方向分别包含自己的绝对角度，但两根指针之间的夹角只取决于：
 
@@ -196,45 +228,78 @@ $$
 
 ### 具体实现
 
-下面看 RoPE 如何构造出这个解。先只考虑二维向量，定义旋转矩阵：
+下面看 RoPE 如何构造出这个解。先只考虑二维向量，定义位置 $m$ 对应的旋转矩阵：
 
-![位置 m 对应的二维旋转矩阵](rope-09.png)
+$$
+R_m=
+\begin{bmatrix}
+\cos(m\theta) & -\sin(m\theta)\\
+\sin(m\theta) & \cos(m\theta)
+\end{bmatrix}.
+$$
 
 使用旋转矩阵给向量加入位置：
 
-![分别用旋转矩阵变换 Query 和 Key](rope-10.png)
+$$
+f(q,m)=R_mq,
+\qquad
+f(k,n)=R_nk.
+$$
 
 这表示把 $q$ 旋转 $m\theta$，把 $k$ 旋转 $n\theta$。现在计算二者的内积：
 
-![旋转后 Query 与 Key 的内积](rope-11.png)
+$$
+(R_mq)^\top(R_nk).
+$$
 
-写成矩阵形式：
+根据转置规则展开：
 
-![将旋转后的内积写成矩阵乘法](rope-12.png)
+$$
+(R_mq)^\top(R_nk)=q^\top R_m^\top R_nk.
+$$
 
 旋转矩阵有一个重要性质：转置等于反向旋转。
 
-![旋转矩阵转置等于负角度旋转](rope-13.png)
+$$
+R_m^\top=R_{-m}.
+$$
 
 因此，两个旋转矩阵可以合并：
 
-![两个绝对位置旋转合并为相对位置旋转](rope-14.png)
+$$
+R_m^\top R_n=R_{-m}R_n=R_{n-m}.
+$$
 
 于是得到：
 
-![RoPE 内积最终只依赖相对位置](rope-15.png)
+$$
+\left\langle R_mq,R_nk\right\rangle
+=q^\top R_{n-m}k.
+$$
 
 最终结果只依赖 $n-m$，不再分别依赖 $m$、$n$，正好满足最初要求：
 
-![RoPE 满足相对位置目标函数](rope-16.png)
+$$
+\left\langle f(q,m),f(k,n)\right\rangle
+=g(q,k,n-m).
+$$
 
 这里写成 $m-n$ 还是 $n-m$ 取决于内积展开与符号约定；核心结论不变：结果只依赖两个位置之差。
 
 ### 实际例子
 
-下面的推导图把二维情况下从约束条件、复数形式到旋转形式的过程放在了一起：
+二维向量也可以看成复数。设向量 $q$ 的模长为 $\lVert q\rVert$、初始辐角为 $\Theta(q)$，位置 $m$ 让它额外旋转 $m\theta$，那么：
 
-![RoPE 二维形式的完整推导示例](rope-17.png)
+$$
+\begin{aligned}
+f(q,m)
+&=R_f(q,m)e^{\mathrm{i}\Theta_f(q,m)}\\
+&=\lVert q\rVert e^{\mathrm{i}(\Theta(q)+m\theta)}\\
+&=q\,e^{\mathrm{i}m\theta}.
+\end{aligned}
+$$
+
+复数乘以 $e^{\mathrm{i}m\theta}$ 的几何意义就是旋转 $m\theta$。把它写回实数坐标，正好得到前面的二维旋转矩阵。
 
 实际 Transformer 的维度不是 2，而可能是 128、256 或 4096。RoPE 会把向量每两个维度分成一组：
 
@@ -244,11 +309,27 @@ $$
 
 每组二维分量使用不同的旋转频率：
 
-![RoPE 第 i 组的旋转频率](rope-18.png)
+$$
+\theta_i=10000^{-2i/d}.
+$$
 
 第 $i$ 组在位置 $m$ 的旋转角度为 $m\theta_i$，因此：
 
-![二维分量对在位置 m 的旋转公式](rope-19.png)
+$$
+\begin{bmatrix}
+\tilde{q}_{m,2i}\\
+\tilde{q}_{m,2i+1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(m\theta_i) & -\sin(m\theta_i)\\
+\sin(m\theta_i) & \cos(m\theta_i)
+\end{bmatrix}
+\begin{bmatrix}
+q_{2i}\\
+q_{2i+1}
+\end{bmatrix}.
+$$
 
 不同维度对有不同频率：高频维度负责刻画较短距离，低频维度负责刻画较长距离。
 
@@ -278,9 +359,16 @@ $$
 
 所以一共有 4 组二维分量，第 $i$ 组就是 $(q_{2i},q_{2i+1})$。这里的“组”只是对向量分量的划分方式。
 
-为什么必须两个维度一组？因为平面旋转需要两个坐标。旋转矩阵会把原始二维向量映射到同一平面中的新方向：
+为什么必须两个维度一组？因为平面旋转需要两个坐标。对于二维向量 $(x,y)$，旋转 $\phi$ 后得到：
 
-![二维旋转为何需要两个维度](rope-20.png)
+$$
+\begin{aligned}
+x'&=x\cos\phi-y\sin\phi,\\
+y'&=x\sin\phi+y\cos\phi.
+\end{aligned}
+$$
+
+两个新坐标都同时依赖原来的 $x$、$y$，所以二维旋转不能只作用于单独一个分量。
 
 每一组使用不同的旋转速度。第 $i$ 组使用频率：
 
@@ -288,9 +376,23 @@ $$
 \theta_i=10000^{-2i/d}.
 $$
 
-位置为 $m$ 时，该组的旋转角度为 $m\theta_i$，变换结果为：
+位置为 $m$ 时，该组的旋转角度为 $m\theta_i$，变换结果仍是：
 
-![第 i 组经过 RoPE 后的二维变换](rope-21.png)
+$$
+\begin{bmatrix}
+\tilde{q}_{m,2i}\\
+\tilde{q}_{m,2i+1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos(m\theta_i) & -\sin(m\theta_i)\\
+\sin(m\theta_i) & \cos(m\theta_i)
+\end{bmatrix}
+\begin{bmatrix}
+q_{2i}\\
+q_{2i+1}
+\end{bmatrix}.
+$$
 
 每组包含两个维度，但两个维度共享同一个频率 $\theta_i$。当 $d=8$ 时：
 
@@ -301,9 +403,19 @@ $$
 | 2 | $(q_4,q_5)$ | $\theta_2=10000^{-4/8}=0.01$ |
 | 3 | $(q_6,q_7)$ | $\theta_3=10000^{-6/8}=0.001$ |
 
-位置 $m$ 的整个向量经过变换后可以写成：
+位置 $m$ 的整个向量经过变换后，可以把四组结果拼接起来：
 
-![维度为 8 的 Query 按四个二维平面分别旋转](rope-22.png)
+$$
+\tilde{q}_m=
+\begin{bmatrix}
+\operatorname{Rotate}(q_0,q_1;m\theta_0)\\
+\operatorname{Rotate}(q_2,q_3;m\theta_1)\\
+\operatorname{Rotate}(q_4,q_5;m\theta_2)\\
+\operatorname{Rotate}(q_6,q_7;m\theta_3)
+\end{bmatrix},
+$$
+
+其中 $\operatorname{Rotate}(x,y;\phi)$ 表示把二维分量 $(x,y)$ 旋转 $\phi$ 后得到的两个新分量。
 
 结果依然只有 8 个分量，只是被分成 4 个二维平面分别旋转。
 
@@ -332,21 +444,51 @@ $$
 
 二维旋转矩阵定义为：
 
-![二维旋转矩阵的标准形式](rope-23.png)
+$$
+R_\phi=
+\begin{bmatrix}
+\cos\phi & -\sin\phi\\
+\sin\phi & \cos\phi
+\end{bmatrix}.
+$$
 
 这个矩阵会保持任意向量的长度不变，同时让向量方向增加角度 $\phi$。
 
-先看 $x$ 轴单位向量。旋转矩阵把它旋转了 $\phi$：
+先看 $x$ 轴单位向量 $e_x=[1,0]^\top$。旋转矩阵把它旋转了 $\phi$：
 
-![旋转矩阵作用于 x 轴单位向量](rope-24.png)
+$$
+R_\phi e_x
+=
+\begin{bmatrix}
+\cos\phi & -\sin\phi\\
+\sin\phi & \cos\phi
+\end{bmatrix}
+\begin{bmatrix}1\\0\end{bmatrix}
+=
+\begin{bmatrix}\cos\phi\\\sin\phi\end{bmatrix}.
+$$
 
-再看 $y$ 轴单位向量，它也会被旋转 $\phi$：
+结果正是单位圆上角度为 $\phi$ 的点。由于
 
-![旋转矩阵作用于 y 轴单位向量](rope-25.png)
+$$
+\cos^2\phi+\sin^2\phi=1,
+$$
 
-从单位圆上的坐标也可以直观看到，角度增加 $\phi$ 后，向量的长度仍保持不变：
+旋转后的向量长度仍为 1。
 
-![单位圆上的二维旋转几何解释](rope-26.png)
+再看 $y$ 轴单位向量 $e_y=[0,1]^\top$，它也会被旋转 $\phi$：
+
+$$
+R_\phi e_y
+=
+\begin{bmatrix}
+\cos\phi & -\sin\phi\\
+\sin\phi & \cos\phi
+\end{bmatrix}
+\begin{bmatrix}0\\1\end{bmatrix}
+=
+\begin{bmatrix}-\sin\phi\\\cos\phi\end{bmatrix}.
+$$
 
 这说明旋转矩阵的两个列向量，正是原始坐标轴旋转后的结果。RoPE 将这一标准二维旋转按不同频率复制到高维向量的多个二维分量对中，从而完成位置编码。
 
