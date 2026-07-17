@@ -21,6 +21,7 @@ hasCJKLanguage = true
 
 [params]
   env = "production"
+  locale = "zh-CN"
   title = "Ge Zhang · 技术笔记"
   description = "聚焦 AI 基础、大模型推理加速、投机推理与计算硬件的个人技术博客"
   author = "Ge Zhang"
