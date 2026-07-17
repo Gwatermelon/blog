@@ -316,19 +316,13 @@ $$
 第 $i$ 组在位置 $m$ 的旋转角度为 $m\theta_i$，因此：
 
 $$
-\begin{bmatrix}
-\tilde{q}_{m,2i}\\
+\tilde{q}_{m,2i}
+=q_{2i}\cos(m\theta_i)-q_{2i+1}\sin(m\theta_i).
+$$
+
+$$
 \tilde{q}_{m,2i+1}
-\end{bmatrix}
-=
-\begin{bmatrix}
-\cos(m\theta_i) & -\sin(m\theta_i)\\
-\sin(m\theta_i) & \cos(m\theta_i)
-\end{bmatrix}
-\begin{bmatrix}
-q_{2i}\\
-q_{2i+1}
-\end{bmatrix}.
+=q_{2i}\sin(m\theta_i)+q_{2i+1}\cos(m\theta_i).
 $$
 
 不同维度对有不同频率：高频维度负责刻画较短距离，低频维度负责刻画较长距离。
@@ -379,19 +373,13 @@ $$
 位置为 $m$ 时，该组的旋转角度为 $m\theta_i$，变换结果仍是：
 
 $$
-\begin{bmatrix}
-\tilde{q}_{m,2i}\\
+\tilde{q}_{m,2i}
+=q_{2i}\cos(m\theta_i)-q_{2i+1}\sin(m\theta_i).
+$$
+
+$$
 \tilde{q}_{m,2i+1}
-\end{bmatrix}
-=
-\begin{bmatrix}
-\cos(m\theta_i) & -\sin(m\theta_i)\\
-\sin(m\theta_i) & \cos(m\theta_i)
-\end{bmatrix}
-\begin{bmatrix}
-q_{2i}\\
-q_{2i+1}
-\end{bmatrix}.
+=q_{2i}\sin(m\theta_i)+q_{2i+1}\cos(m\theta_i).
 $$
 
 每组包含两个维度，但两个维度共享同一个频率 $\theta_i$。当 $d=8$ 时：
