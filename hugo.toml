@@ -1,5 +1,4 @@
 baseURL = "https://blog-shf.pages.dev/"
-languageCode = "zh-CN"
 locale = "zh-CN"
 defaultContentLanguage = "zh"
 title = "Ge Zhang · 技术笔记"
