@@ -28,12 +28,12 @@ taskGroups:
       - id: "ai-stable-latent-moe"
         text: "stable LatentMoE"
         note: "梳理 LatentMoE 的稳定训练机制、路由方式与模型容量收益"
-  - title: "大模型推理加速"
-    subtitle: "围绕投机推理与缓存机制回答关键问题"
-    tasks:
       - id: "inference-qkv-kv-cache"
         text: "QKV 为什么只有 KV Cache"
         note: "从自回归注意力中的复用关系讲清楚原因"
+  - title: "大模型推理加速"
+    subtitle: "围绕投机推理与缓存机制回答关键问题"
+    tasks: []
   - title: "算子实现与优化"
     subtitle: "从数学定义走到面向硬件的高效实现"
     tasks:

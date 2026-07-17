@@ -1,7 +1,7 @@
 ---
 title: "关于我"
 date: 2026-07-16
-lastmod: 2026-07-16
+lastmod: 2026-07-17
 description: "张革的技术经历与研究方向，聚焦大模型推理加速、AI Agent、程序分析和自动算子优化。"
 summary: "高级工程师，主要从事大模型推理加速、AI Agent、程序分析和自动算子优化。"
 layout: "single"
@@ -12,7 +12,7 @@ ShowToc: true
 
 联系方式：
 
-- Email: 772422673 [at] qq.com
+- Email: 772422673@qq.com
 - GitHub: [Gwatermelon](https://github.com/Gwatermelon)
 
 ## 工作经历
