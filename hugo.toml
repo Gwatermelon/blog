@@ -63,7 +63,7 @@ hasCJKLanguage = true
     favicon16x16 = "favicon-16x16.png"
     favicon32x32 = "favicon-32x32.png"
     apple_touch_icon = "apple-touch-icon.png"
-    safari_pinned-tab = "safari-pinned-tab.svg"
+    safari_pinned_tab = "safari-pinned-tab.svg"
     theme_color = "#14213d"
     msapplication_TileColor = "#14213d"
 
