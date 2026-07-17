@@ -77,6 +77,10 @@ hasCJKLanguage = true
     codeFences = true
     guessSyntax = true
     lineNos = false
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [['$$', '$$']]
   [markup.goldmark.renderer]
     unsafe = false
 

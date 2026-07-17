@@ -337,6 +337,14 @@ body {
   font-weight: 750;
 }
 
+/* Keep long display equations inside the article column on narrow screens. */
+.post-content mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 4px;
+}
+
 @media (max-width: 700px) {
   .todo-hero, .paper-library-header { padding: 30px 24px; border-radius: 20px; }
   .todo-group > header { padding-inline: 20px; }
