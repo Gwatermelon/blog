@@ -13,3 +13,7 @@
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
 {{- end }}
+{{- if and .IsPage (.Param "ShowToc") }}
+{{- $readingToc := resources.Get "js/reading-toc.js" | js.Build | resources.Minify | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $readingToc.RelPermalink }}" integrity="{{ $readingToc.Data.Integrity }}"></script>
+{{- end }}
