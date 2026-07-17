@@ -89,37 +89,21 @@ $$
 | 2 | 4 | 5 |
 | 3 | 6 | 7 |
 
-因此，完整的位置编码可以写成：
+为了紧凑地写出完整位置编码，记：
 
 $$
-p_k=
-\begin{bmatrix}
-\sin\left(k/10000^{0/8}\right)\\
-\cos\left(k/10000^{0/8}\right)\\
-\sin\left(k/10000^{2/8}\right)\\
-\cos\left(k/10000^{2/8}\right)\\
-\sin\left(k/10000^{4/8}\right)\\
-\cos\left(k/10000^{4/8}\right)\\
-\sin\left(k/10000^{6/8}\right)\\
-\cos\left(k/10000^{6/8}\right)
-\end{bmatrix}.
+s_i=\sin\left(\frac{k}{10000^{2i/8}}\right),
+\qquad
+c_i=\cos\left(\frac{k}{10000^{2i/8}}\right).
 $$
 
-把幂次化简后，等价于：
+那么 $d=8$ 时的位置向量为：
 
 $$
-p_k=
-\begin{bmatrix}
-\sin(k)\\
-\cos(k)\\
-\sin(k/10)\\
-\cos(k/10)\\
-\sin(k/100)\\
-\cos(k/100)\\
-\sin(k/1000)\\
-\cos(k/1000)
-\end{bmatrix}.
+p_k=(s_0,c_0,s_1,c_1,s_2,c_2,s_3,c_3)^\top.
 $$
+
+此时四组频率依次是 $1$、$0.1$、$0.01$、$0.001$，也就是分别计算 $k$、$k/10$、$k/100$、$k/1000$ 的正弦和余弦。
 
 可以看到，不同的 $i$ 对应不同的变化频率：
 
@@ -394,13 +378,9 @@ $$
 位置 $m$ 的整个向量经过变换后，可以把四组结果拼接起来：
 
 $$
-\tilde{q}_m=
-\begin{bmatrix}
-\operatorname{Rotate}(q_0,q_1;m\theta_0)\\
-\operatorname{Rotate}(q_2,q_3;m\theta_1)\\
-\operatorname{Rotate}(q_4,q_5;m\theta_2)\\
-\operatorname{Rotate}(q_6,q_7;m\theta_3)
-\end{bmatrix},
+\tilde{q}_m
+=\operatorname{concat}_{i=0}^{3}
+\operatorname{Rotate}(q_{2i},q_{2i+1};m\theta_i).
 $$
 
 其中 $\operatorname{Rotate}(x,y;\phi)$ 表示把二维分量 $(x,y)$ 旋转 $\phi$ 后得到的两个新分量。
@@ -442,18 +422,10 @@ $$
 
 这个矩阵会保持任意向量的长度不变，同时让向量方向增加角度 $\phi$。
 
-先看 $x$ 轴单位向量 $e_x=[1,0]^\top$。旋转矩阵把它旋转了 $\phi$：
+先看 $x$ 轴单位向量 $e_x=(1,0)^\top$。旋转矩阵把它旋转了 $\phi$：
 
 $$
-R_\phi e_x
-=
-\begin{bmatrix}
-\cos\phi & -\sin\phi\\
-\sin\phi & \cos\phi
-\end{bmatrix}
-\begin{bmatrix}1\\0\end{bmatrix}
-=
-\begin{bmatrix}\cos\phi\\\sin\phi\end{bmatrix}.
+R_\phi e_x=(\cos\phi,\sin\phi)^\top.
 $$
 
 结果正是单位圆上角度为 $\phi$ 的点。由于
@@ -464,18 +436,10 @@ $$
 
 旋转后的向量长度仍为 1。
 
-再看 $y$ 轴单位向量 $e_y=[0,1]^\top$，它也会被旋转 $\phi$：
+再看 $y$ 轴单位向量 $e_y=(0,1)^\top$，它也会被旋转 $\phi$：
 
 $$
-R_\phi e_y
-=
-\begin{bmatrix}
-\cos\phi & -\sin\phi\\
-\sin\phi & \cos\phi
-\end{bmatrix}
-\begin{bmatrix}0\\1\end{bmatrix}
-=
-\begin{bmatrix}-\sin\phi\\\cos\phi\end{bmatrix}.
+R_\phi e_y=(-\sin\phi,\cos\phi)^\top.
 $$
 
 这说明旋转矩阵的两个列向量，正是原始坐标轴旋转后的结果。RoPE 将这一标准二维旋转按不同频率复制到高维向量的多个二维分量对中，从而完成位置编码。
