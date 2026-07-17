@@ -14,6 +14,7 @@ ShowToc: true
 
 - Email: 772422673@qq.com
 - GitHub: [Gwatermelon](https://github.com/Gwatermelon)
+- 代码仓：[Gwatermelon/blog](https://github.com/Gwatermelon/blog)
 
 ## 工作经历
 
