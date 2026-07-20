@@ -47,6 +47,9 @@ hasCJKLanguage = true
     Title = "Ge Zhang"
     Content = ""
 
+  [params.githubContributions]
+    username = "Gwatermelon"
+
   [[params.socialIcons]]
     name = "github"
     url = "https://github.com/Gwatermelon"
