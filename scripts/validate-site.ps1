@@ -115,6 +115,7 @@ if ($PublicDir) {
   $requiredPages = @(
     'index.html', 'index.json', 'index.xml', 'robots.txt', 'sitemap.xml',
     'about/index.html', 'todo/index.html', 'search/index.html',
+    'ai-fundamentals/add-layernorm/index.html',
     'ai-fundamentals/softmax-optimization/index.html',
     'papers/token-recycling/index.html',
     'math/taylor-series/index.html',
@@ -187,6 +188,12 @@ if ($PublicDir) {
     $softmax = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/softmax-optimization/index.html')
     if ($softmax -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Softmax optimization article is missing MathJax' }
     if ($softmax -notmatch 'sigmoid-function\.png') { Add-Issue 'Softmax optimization article is missing its Sigmoid figure' }
+
+    $addLayerNorm = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/add-layernorm/index.html')
+    if ($addLayerNorm -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Add&LayerNorm article is missing MathJax' }
+    if ($addLayerNorm -notmatch 'transformer-architecture\.png') { Add-Issue 'Add&LayerNorm article is missing its Transformer figure' }
+    if ($addLayerNorm -notmatch 'residual-connection\.png') { Add-Issue 'Add&LayerNorm article is missing its residual figure' }
+    if ($addLayerNorm -notmatch 'normalization-comparison\.png') { Add-Issue 'Add&LayerNorm article is missing its normalization comparison figure' }
   }
 }
 
