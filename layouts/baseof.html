@@ -25,10 +25,10 @@
     {{ partialCached "header.html" . .Page -}}
     {{- if .IsHome }}
     <div class="home-layout">
+        {{- partial "github-contributions.html" . }}
         <main class="main">
             {{- block "main" . }}{{ end }}
         </main>
-        {{- partial "github-contributions.html" . }}
     </div>
     {{- else }}
     <main class="main">

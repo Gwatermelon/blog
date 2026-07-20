@@ -21,7 +21,7 @@
     today.setHours(0, 0, 0, 0);
 
     const start = new Date(today);
-    start.setDate(start.getDate() - 364);
+    start.setMonth(start.getMonth() - 6);
     const gridStart = new Date(start);
     gridStart.setDate(gridStart.getDate() - gridStart.getDay());
 
@@ -76,8 +76,8 @@
         });
       months.replaceChildren(monthFragment);
     }
-    summary.textContent = `过去一年共 ${total.toLocaleString('zh-CN')} 次贡献`;
-    calendar.setAttribute('aria-label', `${username} 过去一年共 ${total} 次 GitHub 贡献`);
+    summary.textContent = `过去六个月共 ${total.toLocaleString('zh-CN')} 次贡献`;
+    calendar.setAttribute('aria-label', `${username} 过去六个月共 ${total} 次 GitHub 贡献`);
     scroll?.scrollTo({ left: scroll.scrollWidth });
   };
 
