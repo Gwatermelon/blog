@@ -1,7 +1,7 @@
 ---
 title: "Research Todo"
 date: 2026-07-16
-lastmod: 2026-07-17
+lastmod: 2026-07-20
 description: "记录当前真正需要推进的算法题、数学知识、推理加速问题和算子实现任务。"
 layout: "todo"
 ShowToc: false
@@ -31,15 +31,18 @@ taskGroups:
       - id: "inference-qkv-kv-cache"
         text: "QKV 为什么只有 KV Cache"
         note: "从自回归注意力中的复用关系讲清楚原因"
+  - title: "数学知识"
+    subtitle: "补齐理解模型结构、训练过程与优化方法所需的数学基础"
+    tasks:
+      - id: "math-jacobian-matrix"
+        text: "雅可比矩阵"
+        note: "整理定义、几何意义、链式法则以及在神经网络反向传播中的应用"
   - title: "大模型推理加速"
     subtitle: "围绕投机推理与缓存机制回答关键问题"
     tasks: []
   - title: "算子实现与优化"
     subtitle: "从数学定义走到面向硬件的高效实现"
     tasks:
-      - id: "kernel-softmax"
-        text: "Softmax 如何实现和优化"
-        note: "覆盖数值稳定性、并行归约、访存与融合"
       - id: "kernel-flash-attention"
         text: "讲解 FlashAttention"
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
