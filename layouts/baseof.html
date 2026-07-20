@@ -25,7 +25,9 @@
     {{ partialCached "header.html" . .Page -}}
     {{- if .IsHome }}
     <div class="home-layout">
-        {{- partial "github-contributions.html" . }}
+        <div class="github-contributions-rail">
+            {{- partial "github-contributions.html" . }}
+        </div>
         <main class="main">
             {{- block "main" . }}{{ end }}
         </main>

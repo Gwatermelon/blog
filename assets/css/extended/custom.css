@@ -46,11 +46,17 @@ body {
   padding-inline: 0;
 }
 
-.github-contributions {
+.github-contributions-rail {
   position: absolute;
-  top: 36px;
+  top: 0;
+  bottom: 0;
   left: calc(100% + 16px);
   width: 252px;
+}
+
+.github-contributions {
+  position: sticky;
+  top: 86px;
   padding: 22px 20px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -637,6 +643,11 @@ body {
 @media (max-width: 1356px) {
   .home-layout {
     width: min(100% - 48px, 820px);
+  }
+
+  .github-contributions-rail {
+    position: static;
+    width: auto;
   }
 
   .github-contributions {
