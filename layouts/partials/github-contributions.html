@@ -13,14 +13,22 @@
 
   <p class="github-contributions-summary" data-contribution-summary aria-live="polite">正在加载近一年的贡献记录…</p>
   <div class="github-contributions-scroll" data-contribution-scroll>
-    <div class="github-contributions-calendar" data-contribution-calendar role="img" aria-label="{{ $username }} 近一年的 GitHub 贡献日历"></div>
+    <div class="github-contributions-chart">
+      <div class="github-contributions-months" data-contribution-months aria-hidden="true"></div>
+      <div class="github-contributions-weekdays" aria-hidden="true">
+        <span style="--weekday: 2">Mon</span>
+        <span style="--weekday: 4">Wed</span>
+        <span style="--weekday: 6">Fri</span>
+      </div>
+      <div class="github-contributions-calendar" data-contribution-calendar role="img" aria-label="{{ $username }} 近一年的 GitHub 贡献日历"></div>
+    </div>
   </div>
   <footer class="github-contributions-footer">
-    <span>过去一年</span>
+    <a href="https://docs.github.com/articles/viewing-contributions-on-your-profile/" target="_blank" rel="noopener">Learn how we count contributions</a>
     <span class="github-contributions-legend" aria-label="贡献数量图例">
-      <span>少</span>
+      <span>Less</span>
       {{- range seq 0 4 }}<i data-level="{{ . }}" aria-hidden="true"></i>{{- end }}
-      <span>多</span>
+      <span>More</span>
     </span>
   </footer>
   <p class="github-contributions-fallback" data-contribution-fallback hidden>

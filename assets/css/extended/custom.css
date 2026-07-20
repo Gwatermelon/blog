@@ -110,20 +110,63 @@ body {
 }
 
 .github-contributions-scroll {
+  --contribution-cell: 4.5px;
+  --contribution-gap: .1px;
+  --contribution-label-width: 24px;
   max-width: 100%;
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
 
+.github-contributions-chart {
+  display: grid;
+  grid-template-columns: var(--contribution-label-width) max-content;
+  grid-template-rows: 16px auto;
+  width: max-content;
+}
+
+.github-contributions-months {
+  position: relative;
+  grid-column: 2;
+  width: calc(53 * var(--contribution-cell) + 52 * var(--contribution-gap));
+  height: 16px;
+  color: var(--secondary);
+  font-size: 9px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.github-contributions-months span {
+  position: absolute;
+  left: calc(var(--month-week) * (var(--contribution-cell) + var(--contribution-gap)));
+  transform: translateX(1px);
+}
+
+.github-contributions-weekdays {
+  display: grid;
+  grid-column: 1;
+  grid-row: 2;
+  grid-template-rows: repeat(7, var(--contribution-cell));
+  gap: var(--contribution-gap);
+  padding-right: 5px;
+  color: var(--secondary);
+  font-size: 8px;
+  line-height: var(--contribution-cell);
+  text-align: right;
+}
+
+.github-contributions-weekdays span { grid-row: var(--weekday); }
+
 .github-contributions-calendar {
   display: grid;
+  grid-column: 2;
+  grid-row: 2;
   grid-auto-flow: column;
-  grid-auto-columns: 5px;
-  grid-template-rows: repeat(7, 5px);
-  gap: .09px;
+  grid-auto-columns: var(--contribution-cell);
+  grid-template-rows: repeat(7, var(--contribution-cell));
+  gap: var(--contribution-gap);
   width: max-content;
-  min-height: 36px;
 }
 
 .github-contribution-cell,
@@ -133,7 +176,7 @@ body {
   background: #ebedf0;
 }
 
-.github-contribution-cell { width: 5px; height: 5px; }
+.github-contribution-cell { width: var(--contribution-cell); height: var(--contribution-cell); }
 .github-contributions-legend i { width: 10px; height: 10px; }
 
 .github-contribution-cell[data-level="empty"] { opacity: .32; }
@@ -148,6 +191,8 @@ body {
   font-size: 11px;
 }
 
+.github-contributions-footer > a { color: var(--secondary); }
+.github-contributions-footer > a:hover { color: var(--accent); }
 .github-contributions-legend { display: flex; gap: 4px; align-items: center; }
 .github-contributions-legend span { margin-inline: 2px; }
 
@@ -603,30 +648,32 @@ body {
   }
 
   .github-contributions-calendar {
-    grid-auto-columns: 11px;
-    grid-template-rows: repeat(7, 11px);
+    grid-auto-columns: var(--contribution-cell);
+    grid-template-rows: repeat(7, var(--contribution-cell));
   }
 
-  .github-contribution-cell { width: 11px; height: 11px; }
+  .github-contributions-scroll {
+    --contribution-cell: 11px;
+    --contribution-gap: 3px;
+    --contribution-label-width: 28px;
+  }
 }
 
 @media (max-width: 700px) {
   .home-layout { width: 100%; padding: 0 18px; }
   .home-layout > .main { padding: 0; }
   .github-contributions { padding: 21px 20px; border-radius: 18px; }
-  .github-contributions-calendar {
-    grid-auto-columns: 5px;
-    grid-template-rows: repeat(7, 5px);
-    gap: .85px;
+  .github-contributions-scroll {
+    --contribution-cell: 4.5px;
+    --contribution-gap: .6px;
+    --contribution-label-width: 24px;
   }
-  .github-contribution-cell { width: 5px; height: 5px; }
 }
 
 @media (max-width: 400px) {
-  .github-contributions-calendar {
-    grid-auto-columns: 4px;
-    grid-template-rows: repeat(7, 4px);
-    gap: .5px;
+  .github-contributions-scroll {
+    --contribution-cell: 3.5px;
+    --contribution-gap: .5px;
+    --contribution-label-width: 22px;
   }
-  .github-contribution-cell { width: 4px; height: 4px; }
 }

@@ -2,6 +2,7 @@
   const script = document.currentScript;
   const username = script?.dataset.username;
   const calendar = document.querySelector('[data-contribution-calendar]');
+  const months = document.querySelector('[data-contribution-months]');
   const summary = document.querySelector('[data-contribution-summary]');
   const fallback = document.querySelector('[data-contribution-fallback]');
   const scroll = document.querySelector('[data-contribution-scroll]');
@@ -14,11 +15,6 @@
     day: 'numeric'
   });
 
-  const parseDate = (value) => {
-    const [year, month, day] = value.split('-').map(Number);
-    return new Date(year, month - 1, day);
-  };
-
   const render = (items) => {
     const contributions = new Map(items.map((item) => [item.date, item]));
     const today = new Date();
@@ -30,10 +26,18 @@
     gridStart.setDate(gridStart.getDate() - gridStart.getDay());
 
     const fragment = document.createDocumentFragment();
+    const monthStarts = [];
     let total = 0;
     let date = new Date(gridStart);
 
     while (date <= today) {
+      const dayOffset = Math.round((date - gridStart) / 86400000);
+      if (date.getDate() === 1 || dayOffset === 0) {
+        monthStarts.push({
+          label: `${date.getMonth() + 1}月`,
+          week: Math.floor(dayOffset / 7)
+        });
+      }
       const key = [
         date.getFullYear(),
         String(date.getMonth() + 1).padStart(2, '0'),
@@ -57,6 +61,21 @@
     }
 
     calendar.replaceChildren(fragment);
+    if (months) {
+      const monthFragment = document.createDocumentFragment();
+      monthStarts
+        .filter((month, index) => {
+          const next = monthStarts[index + 1];
+          return !next || next.week - month.week >= 3;
+        })
+        .forEach((month) => {
+          const label = document.createElement('span');
+          label.textContent = month.label;
+          label.style.setProperty('--month-week', String(month.week));
+          monthFragment.appendChild(label);
+        });
+      months.replaceChildren(monthFragment);
+    }
     summary.textContent = `过去一年共 ${total.toLocaleString('zh-CN')} 次贡献`;
     calendar.setAttribute('aria-label', `${username} 过去一年共 ${total} 次 GitHub 贡献`);
     scroll?.scrollTo({ left: scroll.scrollWidth });
