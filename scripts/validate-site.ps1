@@ -116,6 +116,7 @@ if ($PublicDir) {
     'index.html', 'index.json', 'index.xml', 'robots.txt', 'sitemap.xml',
     'about/index.html', 'todo/index.html', 'search/index.html',
     'ai-fundamentals/add-layernorm/index.html',
+    'ai-fundamentals/feedforward/index.html',
     'ai-fundamentals/softmax-optimization/index.html',
     'papers/token-recycling/index.html',
     'math/taylor-series/index.html',
@@ -194,6 +195,10 @@ if ($PublicDir) {
     if ($addLayerNorm -notmatch 'transformer-architecture\.png') { Add-Issue 'Add&LayerNorm article is missing its Transformer figure' }
     if ($addLayerNorm -notmatch 'residual-connection\.png') { Add-Issue 'Add&LayerNorm article is missing its residual figure' }
     if ($addLayerNorm -notmatch 'normalization-comparison\.png') { Add-Issue 'Add&LayerNorm article is missing its normalization comparison figure' }
+
+    $feedforward = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/feedforward/index.html')
+    if ($feedforward -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Feedforward article is missing MathJax' }
+    if ($feedforward -notmatch 'transformer-architecture\.png') { Add-Issue 'Feedforward article is missing its Transformer figure' }
   }
 }
 
