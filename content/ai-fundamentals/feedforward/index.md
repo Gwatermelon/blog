@@ -1,5 +1,5 @@
 ---
-title: "feedforward"
+title: "FeedForward"
 date: 2026-07-21
 lastmod: 2026-07-21
 draft: false
@@ -86,9 +86,7 @@ $$
 ReLU 的全称是 Rectified Linear Unit，中文通常叫“修正线性单元”。其定义为：
 
 $$
-\operatorname{ReLU}(x)=\max(0,x)
-=
-\begin{cases}
+\operatorname{ReLU}(x)=\max(0,x)=\begin{cases}
 x,&x>0,\\
 0,&x\le 0.
 \end{cases}
@@ -160,9 +158,7 @@ $$
 为缓解这个问题，可以使用 Leaky ReLU：
 
 $$
-\operatorname{LeakyReLU}(x)
-=
-\begin{cases}
+\operatorname{LeakyReLU}(x)=\begin{cases}
 x,&x>0,\\
 \alpha x,&x\le 0,
 \end{cases}
@@ -342,15 +338,11 @@ $$
 暂时忽略偏置，第一个线性层得到：
 
 $$
-h=W_1x
-=
-\begin{bmatrix}
+h=W_1x=\begin{bmatrix}
 1\times1+1\times2\\
 -1\times1+1\times2\\
 2\times1-1\times2
-\end{bmatrix}
-=
-\begin{bmatrix}
+\end{bmatrix}=\begin{bmatrix}
 3\\
 1\\
 0
@@ -370,14 +362,10 @@ $$
 那么：
 
 $$
-y=W_2a
-=
-\begin{bmatrix}
+y=W_2a=\begin{bmatrix}
 1\times3+2\times1+1\times0\\
 -1\times3+1\times1+2\times0
-\end{bmatrix}
-=
-\begin{bmatrix}
+\end{bmatrix}=\begin{bmatrix}
 5\\
 -2
 \end{bmatrix}.

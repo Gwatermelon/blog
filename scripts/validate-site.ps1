@@ -199,6 +199,7 @@ if ($PublicDir) {
     $feedforward = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/feedforward/index.html')
     if ($feedforward -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Feedforward article is missing MathJax' }
     if ($feedforward -notmatch 'transformer-architecture\.png') { Add-Issue 'Feedforward article is missing its Transformer figure' }
+    if ($feedforward -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Feedforward article contains a formula delimiter parsed as a heading' }
   }
 }
 
