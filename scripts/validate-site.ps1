@@ -119,6 +119,7 @@ if ($PublicDir) {
     'ai-fundamentals/feedforward/index.html',
     'ai-fundamentals/self-attention/index.html',
     'ai-fundamentals/softmax-optimization/index.html',
+    'ai-fundamentals/transformer-architecture/index.html',
     'papers/token-recycling/index.html',
     'math/jacobian-matrix/index.html',
     'math/taylor-series/index.html',
@@ -211,6 +212,12 @@ if ($PublicDir) {
     $selfAttention = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/self-attention/index.html')
     if ($selfAttention -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Self-Attention article is missing MathJax' }
     if ($selfAttention -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Self-Attention article contains a formula delimiter parsed as a heading' }
+
+    $transformerArchitecture = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/transformer-architecture/index.html')
+    if ($transformerArchitecture -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Transformer architecture article is missing MathJax' }
+    if ($transformerArchitecture -notmatch 'original-transformer-architecture\.png') { Add-Issue 'Transformer architecture article is missing the original architecture figure' }
+    if ($transformerArchitecture -notmatch 'scaled-dot-product-and-multi-head-attention\.png') { Add-Issue 'Transformer architecture article is missing the attention figure' }
+    if ($transformerArchitecture -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Transformer architecture article contains a formula delimiter parsed as a heading' }
   }
 }
 
