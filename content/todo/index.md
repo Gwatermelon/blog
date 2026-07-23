@@ -1,7 +1,7 @@
 ---
 title: "Research Todo"
 date: 2026-07-16
-lastmod: 2026-07-20
+lastmod: 2026-07-23
 description: "记录当前真正需要推进的算法题、数学知识、推理加速问题和算子实现任务。"
 layout: "todo"
 ShowToc: false
@@ -28,15 +28,9 @@ taskGroups:
       - id: "ai-stable-latent-moe"
         text: "stable LatentMoE"
         note: "梳理 LatentMoE 的稳定训练机制、路由方式与模型容量收益"
-      - id: "inference-qkv-kv-cache"
-        text: "QKV 为什么只有 KV Cache"
-        note: "从自回归注意力中的复用关系讲清楚原因"
   - title: "数学知识"
     subtitle: "补齐理解模型结构、训练过程与优化方法所需的数学基础"
-    tasks:
-      - id: "math-jacobian-matrix"
-        text: "雅可比矩阵"
-        note: "整理定义、几何意义、链式法则以及在神经网络反向传播中的应用"
+    tasks: []
   - title: "大模型推理加速"
     subtitle: "围绕投机推理与缓存机制回答关键问题"
     tasks: []
@@ -48,4 +42,5 @@ taskGroups:
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
 ---
 
-这 8 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+这 6 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+
