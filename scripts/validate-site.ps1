@@ -117,6 +117,7 @@ if ($PublicDir) {
     'about/index.html', 'todo/index.html', 'search/index.html',
     'ai-fundamentals/add-layernorm/index.html',
     'ai-fundamentals/feedforward/index.html',
+    'ai-fundamentals/self-attention/index.html',
     'ai-fundamentals/softmax-optimization/index.html',
     'papers/token-recycling/index.html',
     'math/jacobian-matrix/index.html',
@@ -206,6 +207,10 @@ if ($PublicDir) {
     if ($feedforward -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Feedforward article is missing MathJax' }
     if ($feedforward -notmatch 'transformer-architecture\.png') { Add-Issue 'Feedforward article is missing its Transformer figure' }
     if ($feedforward -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Feedforward article contains a formula delimiter parsed as a heading' }
+
+    $selfAttention = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/self-attention/index.html')
+    if ($selfAttention -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Self-Attention article is missing MathJax' }
+    if ($selfAttention -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Self-Attention article contains a formula delimiter parsed as a heading' }
   }
 }
 
