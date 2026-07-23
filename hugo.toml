@@ -42,10 +42,7 @@ hasCJKLanguage = true
   ShowRssButtonInSectionTermList = true
   ShowPageNums = true
   displayFullLangName = true
-
-  [params.homeInfoParams]
-    Title = "Ge Zhang"
-    Content = ""
+  disableSpecial1stPost = true
 
   [params.githubContributions]
     username = "Gwatermelon"
@@ -136,3 +133,4 @@ hasCJKLanguage = true
 [minify]
   disableXML = true
   minifyOutput = true
+
