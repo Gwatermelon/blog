@@ -8,6 +8,8 @@
 
 **每日产出：<https://blog-shf.pages.dev>**
 
+**GitHub 代码仓库：<https://github.com/Gwatermelon/blog>**
+
 ## 项目结构
 
 ```text
@@ -54,3 +56,4 @@ GitHub Actions 会在提交和 Pull Request 上执行相同检查，包括文章
 ### 内容尽力去保证一次性理解和记录完整
 ### 可以写的慢一些，但是信息要准确
 ### 最后相信世界是个草台班子，不必内耗，专注提升自己
+
