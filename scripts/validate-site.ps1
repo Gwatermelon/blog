@@ -119,6 +119,7 @@ if ($PublicDir) {
     'ai-fundamentals/feedforward/index.html',
     'ai-fundamentals/softmax-optimization/index.html',
     'papers/token-recycling/index.html',
+    'math/jacobian-matrix/index.html',
     'math/taylor-series/index.html',
     'model-inference/dflash-vs-eagle3/index.html'
   )
@@ -185,6 +186,10 @@ if ($PublicDir) {
 
     $math = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'math/taylor-series/index.html')
     if ($math -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Math page is missing MathJax' }
+
+    $jacobian = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'math/jacobian-matrix/index.html')
+    if ($jacobian -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Jacobian matrix article is missing MathJax' }
+    if ($jacobian -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Jacobian matrix article contains a formula delimiter parsed as a heading' }
 
     $softmax = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'ai-fundamentals/softmax-optimization/index.html')
     if ($softmax -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Softmax optimization article is missing MathJax' }
