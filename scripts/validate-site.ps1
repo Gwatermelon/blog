@@ -179,6 +179,7 @@ if ($PublicDir) {
     if ($homeHtml -notmatch '"@type":"Person"') { Add-Issue 'Home page schema publisher must be Person' }
     if ($homeHtml -notmatch 'class=github-contributions') { Add-Issue 'Home page is missing the GitHub contributions calendar' }
     if ($homeHtml -notmatch '/js/github-contributions\.min\.[a-f0-9]+\.js') { Add-Issue 'Home page is missing its fingerprinted GitHub contributions script' }
+    if ($homeHtml -match 'class="first-entry home-info"') { Add-Issue 'Home page must not render the removed profile card' }
 
     $todo = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'todo/index.html')
     if ($todo -notmatch 'noindex, nofollow') { Add-Issue 'Todo page must render noindex metadata' }
