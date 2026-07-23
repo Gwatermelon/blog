@@ -8,6 +8,8 @@
 
 **每日产出：<https://blog-shf.pages.dev>**
 
+**GitHub 代码仓库：<https://github.com/Gwatermelon/blog>**
+
 ## 项目结构
 
 ```text
