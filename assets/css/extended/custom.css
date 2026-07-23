@@ -239,46 +239,6 @@ body {
 #menu { scrollbar-width: none; }
 #menu::-webkit-scrollbar { display: none; }
 
-.home-info {
-  position: relative;
-  min-height: 310px;
-  margin: 36px 0 46px;
-  padding: 52px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  background: linear-gradient(135deg, var(--entry), var(--accent-soft));
-  box-shadow: 0 24px 70px rgba(20, 33, 61, 0.10);
-}
-
-.home-info::after {
-  content: "</>";
-  position: absolute;
-  right: 34px;
-  bottom: -28px;
-  color: var(--accent);
-  opacity: 0.10;
-  font: 800 130px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-  transform: rotate(-7deg);
-}
-
-.home-info .entry-header h1 {
-  max-width: 600px;
-  margin-bottom: 22px;
-  font-size: clamp(34px, 6vw, 56px);
-  line-height: 1.08;
-  letter-spacing: -0.055em;
-}
-
-.home-info .entry-content {
-  max-width: 620px;
-  color: var(--content);
-  font-size: 18px;
-  line-height: 1.8;
-}
-
-.home-info .entry-footer { margin-top: 28px; }
-
 .social-icons a {
   display: inline-grid;
   width: 42px;
@@ -469,9 +429,6 @@ body {
 
 @media (max-width: 700px) {
   .main { padding: 0 18px; }
-  .home-info { min-height: 0; margin-top: 18px; padding: 34px 26px; border-radius: 22px; }
-  .home-info::after { display: none; }
-  .home-info .entry-content { font-size: 16px; }
   .post-entry { padding: 24px 22px; }
   .post-single { padding: 30px 22px 40px; border-radius: 18px; }
   .post-content { font-size: 16px; }
