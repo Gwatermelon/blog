@@ -86,6 +86,11 @@ Get-ChildItem -LiteralPath (Join-Path $root 'content') -Recurse -Filter *.md | F
       Add-Issue "$relative contains a tag-like less-than expression inside display math; use \lt or an equivalent notation"
     }
   }
+  foreach ($match in [regex]::Matches($markdown, '(?m)(?<!\$)\$(?!\$)([^\r\n]*?)(?<!\$)\$(?!\$)')) {
+    if ($match.Groups[1].Value -match '<[A-Za-z]') {
+      Add-Issue "$relative contains a tag-like less-than expression inside inline math; use \lt or an equivalent notation"
+    }
+  }
   foreach ($match in [regex]::Matches($markdown, '!\[[^\]]*\]\(([^)\s]+)')) {
     $target = $match.Groups[1].Value.Trim('<', '>')
     if ($target -match '^(https?:|data:|/)') { continue }
@@ -128,6 +133,7 @@ if ($PublicDir) {
     'papers/token-recycling/index.html',
     'math/jacobian-matrix/index.html',
     'math/taylor-series/index.html',
+    'model-inference/llama2-config/index.html',
     'model-inference/dflash-vs-eagle3/index.html'
   )
   foreach ($page in $requiredPages) {
@@ -223,6 +229,11 @@ if ($PublicDir) {
     if ($transformerArchitecture -notmatch 'original-transformer-architecture\.png') { Add-Issue 'Transformer architecture article is missing the original architecture figure' }
     if ($transformerArchitecture -notmatch 'scaled-dot-product-and-multi-head-attention\.png') { Add-Issue 'Transformer architecture article is missing the attention figure' }
     if ($transformerArchitecture -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Transformer architecture article contains a formula delimiter parsed as a heading' }
+
+    $llama2Config = Get-Content -Raw -Encoding utf8 -LiteralPath (Join-Path $publicRoot 'model-inference/llama2-config/index.html')
+    if ($llama2Config -notmatch 'mathjax@3\.2\.2') { Add-Issue 'Llama 2 config article is missing MathJax' }
+    if ($llama2Config -match '<h[1-6][^>]*>\$\$') { Add-Issue 'Llama 2 config article contains a formula delimiter parsed as a heading' }
+    if ($llama2Config -notmatch '2\{,\}147\{,\}483\{,\}648') { Add-Issue 'Llama 2 config article is missing its KV Cache estimate' }
   }
 }
 
