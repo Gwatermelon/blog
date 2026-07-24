@@ -81,6 +81,11 @@ foreach ($duplicate in $duplicateIds) {
 Get-ChildItem -LiteralPath (Join-Path $root 'content') -Recurse -Filter *.md | ForEach-Object {
   $markdown = Get-Content -Raw -Encoding utf8 -LiteralPath $_.FullName
   $relative = (Get-RelativePath $root $_.FullName).Replace('\', '/')
+  foreach ($match in [regex]::Matches($markdown, '(?s)\$\$(.*?)\$\$')) {
+    if ($match.Groups[1].Value -match '<[A-Za-z]') {
+      Add-Issue "$relative contains a tag-like less-than expression inside display math; use \lt or an equivalent notation"
+    }
+  }
   foreach ($match in [regex]::Matches($markdown, '!\[[^\]]*\]\(([^)\s]+)')) {
     $target = $match.Groups[1].Value.Trim('<', '>')
     if ($target -match '^(https?:|data:|/)') { continue }
@@ -227,3 +232,4 @@ if ($issues.Count -gt 0) {
 }
 
 Write-Output "Site validation passed ($($mainSections.Count) content sections checked)."
+
