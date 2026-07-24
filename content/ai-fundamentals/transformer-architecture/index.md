@@ -1,7 +1,7 @@
 ---
 title: "transformer结构"
 date: 2026-07-23
-lastmod: 2026-07-23
+lastmod: 2026-07-24
 draft: false
 description: "从原始 Transformer 的 Encoder–Decoder 结构出发，解释自注意力、交叉注意力以及现代 decoder-only 大模型的演变。"
 summary: "为什么原始 Transformer 的 Decoder 有两层注意力，而 GPT、Qwen 等 decoder-only 模型通常只有一类注意力？本文从信息流和矩阵形状出发梳理 Transformer 结构。"
@@ -222,7 +222,7 @@ $$
 
 $$
 P(x_1,x_2,\ldots,x_T)
-=\prod_{t=1}^{T}P(x_t\mid x_{<t}).
+=\prod_{t=1}^{T}P(x_t\mid x_{1:t-1}).
 $$
 
 推理时，提示词位于生成内容之前。回答位置虽然不能看未来，却可以通过因果自注意力看到前面的全部提示词。因此，**没有独立的 Encoder 并不等于模型看不到或无法理解输入**。
@@ -321,3 +321,4 @@ $$
 ## 参考资料
 
 - Vaswani, A. et al. [Attention Is All You Need](https://arxiv.org/abs/1706.03762), 2017.
+
