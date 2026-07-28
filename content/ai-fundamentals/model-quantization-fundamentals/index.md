@@ -1,0 +1,434 @@
+---
+title: "量化基本概念"
+date: 2026-07-28
+lastmod: 2026-07-28
+draft: false
+description: "从数值表示、线性量化公式和矩阵乘法出发，理解模型量化的误差来源、静态与动态量化、PTQ 与 QAT，以及精度和性能评估方法。"
+summary: "量化不是简单地把浮点数改成整数，而是在有限离散值中近似权重和激活。本文系统梳理 scale、zero point、对称量化、INT8 矩阵乘法与量化评估。"
+tags: ["AI 基础", "模型量化", "INT8", "INT4", "PTQ", "QAT"]
+categories: ["AI 基础原理"]
+math: true
+ShowToc: true
+TocOpen: true
+---
+
+> **核心直觉：** 模型量化是在更少的离散数值中近似表示权重和激活，用可控的数值误差换取更低的存储、显存、带宽和计算成本。
+
+## 什么是模型量化
+
+神经网络训练完成后，权重通常使用 FP32、FP16 或 BF16 保存。模型量化（Model Quantization）则用更低位宽的数据类型近似表示权重、激活或中间计算结果。
+
+仅考虑权重时，不同数据类型的理论存储成本如下：
+
+| 数据类型 | 每个参数的位数 | 70 亿参数的理论权重大小 |
+| --- | ---: | ---: |
+| FP32 | 32 bit | 约 28 GB |
+| FP16 / BF16 | 16 bit | 约 14 GB |
+| INT8 | 8 bit | 约 7 GB |
+| INT4 | 4 bit | 约 3.5 GB |
+
+因此，将 FP16 权重转成 INT4 后，理论权重大小会缩小到四分之一。实际模型还需要保存 scale、zero point、分组索引等元数据，所以压缩比通常略低于理论值。
+
+量化也不只是“把小数改成整数”。它需要回答三个问题：
+
+1. 如何建立浮点数与低精度编码之间的映射；
+2. 如何控制舍入、截断和异常值造成的误差；
+3. 如何让部署硬件和推理框架真正利用低精度数据。
+
+## 先区分范围与精度
+
+浮点数通常可抽象为：
+
+$$
+x=(-1)^s\times 2^e\times m,
+$$
+
+其中符号位 $s$ 决定正负，指数 $e$ 主要决定数值范围，尾数 $m$ 主要决定有效精度。
+
+| 类型 | 符号位 | 指数位 | 尾数位 | 主要特点 |
+| --- | ---: | ---: | ---: | --- |
+| FP32 | 1 | 8 | 23 | 范围大、精度高、成本高 |
+| FP16 | 1 | 5 | 10 | 精度高于 BF16，但动态范围较小 |
+| BF16 | 1 | 8 | 7 | 范围接近 FP32，但尾数精度较低 |
+
+FP16 和 BF16 都占 16 bit，却有不同取舍：FP16 把更多位留给尾数，BF16 把更多位留给指数。以 1 附近的相邻可表示数为例：
+
+$$
+\Delta_{\mathrm{FP16}}=2^{-10}\approx 9.77\times10^{-4},
+\qquad
+\Delta_{\mathrm{BF16}}=2^{-7}=7.8125\times10^{-3}.
+$$
+
+整数类型没有指数和尾数。一个有符号 INT8 只有 256 个整数编码，原生范围为 $[-128,127]$；一个有符号 INT4 只有 16 个编码，原生范围为 $[-8,7]$。量化的作用，就是用 scale 和 zero point 把目标浮点区间映射到这些有限编码上。
+
+## 线性量化的数学原理
+
+设原始浮点值为 $x$，量化后的整数为 $q$。最常见的均匀线性量化写成：
+
+$$
+q=\operatorname{clamp}\left(
+\operatorname{round}\left(\frac{x}{s}\right)+z,\,
+q_{\min},q_{\max}
+\right),
+$$
+
+其中：
+
+- $s$ 是 scale，表示整数编码每变化一格对应多大的浮点距离；
+- $z$ 是 zero point，指定浮点数 0 对应哪个整数；
+- $\operatorname{round}$ 把结果映射到最近的整数；
+- $\operatorname{clamp}$ 把结果限制在数据类型的可表示范围内。
+
+反量化（Dequantization）把整数编码解释为近似浮点值：
+
+$$
+\hat{x}=s(q-z).
+$$
+
+这里的 $q$ 只是离散编码。脱离 $s$ 和 $z$，无法判断 $q=5$ 代表 $5$、$0.5$ 还是 $0.05$。例如 $q=5$、$s=0.1$、$z=0$ 时：
+
+$$
+\hat{x}=0.1\times(5-0)=0.5.
+$$
+
+量化误差可定义为：
+
+$$
+e=x-\hat{x}.
+$$
+
+### Scale 决定分辨率
+
+假设 $s=0.01$，那么相邻两个反量化值相差 0.01。原始值 $x=0.537$ 会被量化为：
+
+$$
+q=\operatorname{round}\left(\frac{0.537}{0.01}\right)=54,
+$$
+
+反量化结果为 $\hat{x}=0.54$，误差为 $-0.003$。
+
+scale 越小，量化网格越密、舍入误差通常越小；但固定整数位宽下，可覆盖的浮点范围也会变窄，截断风险随之增加。
+
+### Zero point 负责平移
+
+当整数编码区间或数据分布不关于 0 对称时，需要用 zero point 平移量化区间。若把浮点范围 $[x_{\min},x_{\max}]$ 映射到 $[q_{\min},q_{\max}]$，常见计算为：
+
+$$
+s=\frac{x_{\max}-x_{\min}}{q_{\max}-q_{\min}},
+\qquad
+z\approx q_{\min}-\frac{x_{\min}}{s}.
+$$
+
+实现时还要对 $z$ 舍入并截断到整数范围。zero point 的重要性质是让浮点数 0 能够被精确表示，这对 padding、ReLU 零值和稀疏计算很重要。
+
+## 对称量化与非对称量化
+
+### 对称量化
+
+对称量化把浮点范围扩展为 $[-\alpha,\alpha]$，并令 $z=0$。以常见的对称 INT8 权重量化为例：
+
+$$
+\alpha=\max\left(|x_{\min}|,|x_{\max}|\right),
+\qquad
+s=\frac{\alpha}{127},
+$$
+
+$$
+q=\operatorname{clamp}\left(
+\operatorname{round}\left(\frac{x}{s}\right),-127,127
+\right).
+$$
+
+它的优点是公式简单、矩阵乘法容易实现，因此常用于权重量化。缺点是当数据明显偏向一侧时，另一侧的整数编码会被浪费。
+
+### 非对称量化
+
+非对称量化直接覆盖实际的 $[x_{\min},x_{\max}]$，zero point 通常不为 0。它能更充分地利用整数编码，对偏斜分布往往有更小的量化误差，但矩阵乘法需要额外处理零点修正。
+
+“权重用对称量化、激活用非对称量化”是常见经验，不是普遍定律。实际选择还取决于数据分布、算子实现和硬件后端。
+
+## 量化如何进入矩阵乘法
+
+神经网络的大部分计算可以归结为：
+
+$$
+Y=XW.
+$$
+
+对称量化后，激活和权重可近似写成：
+
+$$
+X\approx s_xQ_x,
+\qquad
+W\approx s_wQ_w.
+$$
+
+代入矩阵乘法：
+
+$$
+Y\approx(s_xQ_x)(s_wQ_w)
+  =s_xs_w(Q_xQ_w).
+$$
+
+$Q_xQ_w$ 可以由低精度整数矩阵乘法完成。INT8 乘法通常使用 INT32 累加，因为单个最大正数乘积已经达到：
+
+$$
+127\times127=16129,
+$$
+
+矩阵乘法还要累加大量乘积，INT8 无法容纳结果。典型 W8A8 数据流可以概括为：
+
+```text
+FP16 / BF16 激活
+        ↓ 量化
+INT8 激活 × INT8 权重
+        ↓
+     INT32 累加
+        ↓ 乘输出 scale
+FP16 / BF16 或量化输出
+```
+
+权重 INT4、激活 FP16 的 weight-only 方案则通常在高性能 kernel 内解包权重、读取分组 scale，并在寄存器或共享内存中完成反量化与乘法融合，而不是先在显存中生成完整的 FP16 权重副本。
+
+## 一个完整的对称 INT8 示例
+
+假设权重为：
+
+$$
+W=[-1.0,-0.5,0,0.3,0.8].
+$$
+
+最大绝对值 $\alpha=1.0$，因此：
+
+$$
+s=\frac{1.0}{127}\approx0.007874.
+$$
+
+量化和反量化结果为：
+
+| 原始值 $x$ | 量化值 $q$ | 反量化值 $\hat{x}$ | $x-\hat{x}$ |
+| ---: | ---: | ---: | ---: |
+| -1.0 | -127 | -1.0000 | 0.0000 |
+| -0.5 | -64 | -0.5039 | 0.0039 |
+| 0 | 0 | 0 | 0 |
+| 0.3 | 38 | 0.2992 | 0.0008 |
+| 0.8 | 102 | 0.8031 | -0.0031 |
+
+下面的 Python 代码复现了这个过程：
+
+```python
+from __future__ import annotations
+
+import numpy as np
+
+
+def symmetric_int8_quantize(
+    values: np.ndarray,
+) -> tuple[np.ndarray, float]:
+    values = values.astype(np.float32)
+    max_abs = float(np.max(np.abs(values)))
+
+    if max_abs == 0.0:
+        return np.zeros_like(values, dtype=np.int8), 1.0
+
+    scale = max_abs / 127.0
+    quantized = np.clip(
+        np.rint(values / scale),
+        -127,
+        127,
+    ).astype(np.int8)
+    return quantized, scale
+
+
+weights = np.array([-1.0, -0.5, 0.0, 0.3, 0.8])
+quantized, scale = symmetric_int8_quantize(weights)
+restored = quantized.astype(np.float32) * scale
+
+print(f"scale: {scale:.8f}")
+print("quantized:", quantized.tolist())
+print("restored:", np.round(restored, 4).tolist())
+print("error:", np.round(weights - restored, 4).tolist())
+```
+
+这里使用 `np.rint` 表示舍入到最近整数。具体后端可能采用 ties-to-even 等明确的舍入规则，比较不同框架时需要确认这一细节。
+
+## 量化误差从哪里来
+
+### 舍入误差
+
+原始值不一定落在量化网格上。例如网格间距为 0.1 时，$0.17$ 只能近似为 $0.2$，误差为 $-0.03$。
+
+### 截断误差
+
+超出量化范围的值会被 clamp 到边界。例如范围为 $[-1,1]$ 时，$1.5$ 只能恢复为 $1.0$，产生 0.5 的误差。这也称为 clipping 或 saturation。
+
+### 异常值放大量化步长
+
+若大多数激活位于 $[-1,1]$，但少数异常值达到 $10$ 或 $-12$，按绝对最大值选择范围时：
+
+$$
+s=\frac{12}{127}\approx0.0945.
+$$
+
+大量普通值只能使用很少的整数档位。若缩小范围，主体数据更精确，异常值却会被截断。因此范围选择本质上是在权衡舍入误差与截断误差。
+
+### 误差会跨层传播
+
+单个权重的误差很小，不代表模型输出误差也小。若：
+
+$$
+\begin{aligned}
+h_1&=f(W_1x),\\
+h_2&=f(W_2h_1),\\
+h_3&=f(W_3h_2),
+\end{aligned}
+$$
+
+那么 $W_1$ 和 $h_1$ 的误差会进入后续层，并可能被放大。低位宽量化通常还需要更细的粒度，例如 per-channel、per-group 或 per-block scale，避免一个异常值控制过大的张量范围。
+
+## 为什么量化可能加速推理
+
+量化的系统收益主要来自三个方面：
+
+1. **降低显存占用。** 更大的模型可以装入单卡，也可以给 KV Cache、并发请求和临时工作区留出更多空间；
+2. **降低显存带宽压力。** 大模型逐 token 解码经常需要反复读取大量权重，权重位宽降低会直接减少读取字节数；
+3. **利用低精度计算单元。** GPU、NPU 和部分 CPU 提供 INT8、INT4、FP8 等专用矩阵乘单元。
+
+但“模型缩小 4 倍”不等于“推理加速 4 倍”。真实收益还取决于：
+
+- 硬件是否原生支持目标数据类型；
+- kernel 是否融合了解包、反量化与矩阵乘法；
+- scale 和元数据读取成本；
+- batch size、矩阵形状和序列长度；
+- 非矩阵乘法算子、KV Cache 与通信所占比例；
+- 当前工作负载究竟受计算还是受带宽限制。
+
+因此，量化方案必须同时报告精度和端到端系统指标。
+
+## 静态量化与动态量化
+
+### 静态量化
+
+静态量化在部署前确定 scale 和 zero point。权重固定，可以直接统计；激活依赖输入，通常需要用有代表性的校准数据运行浮点模型：
+
+```text
+准备代表性数据
+      ↓
+执行浮点前向传播
+      ↓
+记录激活分布
+      ↓
+选择 clipping 范围
+      ↓
+计算并保存量化参数
+```
+
+它的推理额外开销较小，也更容易使用高性能算子；但若校准数据不能代表线上分布，精度可能明显下降。
+
+### 动态量化
+
+动态量化在推理时根据当前输入计算量化参数。例如对每个 token 的激活向量计算：
+
+$$
+s=\frac{\max(|x|)}{127}.
+$$
+
+它更能适应输入分布变化，却需要实时归约、计算 scale，并可能增加 kernel 启动和同步开销。权重量化通常是静态的；“动态”更多描述激活量化参数何时计算。
+
+## PTQ 与 QAT
+
+### PTQ：训练后量化
+
+Post-Training Quantization 在模型训练完成后执行量化，不需要重新进行完整训练：
+
+```text
+浮点模型 → 校准或统计 → 选择量化参数 → 生成量化模型
+```
+
+PTQ 成本较低，适合已有大模型；位宽越低，越需要处理异常值、敏感层和误差补偿。
+
+### QAT：量化感知训练
+
+Quantization-Aware Training 在训练前向传播中插入伪量化：
+
+$$
+x\longrightarrow Q(x)\longrightarrow D(Q(x))\longrightarrow\hat{x}.
+$$
+
+模型在训练时看到量化误差，并通过浮点权重更新逐步适应它。QAT 在激进低位宽下通常更有机会保持精度，但需要训练数据和额外训练成本。伪量化训练也不代表训练过程真的全程使用整数算术。
+
+## 如何评估量化效果
+
+不能只看模型文件大小，也不能只比较单个权重误差。完整评估至少包含五个层次：
+
+| 层次 | 关注内容 | 常见指标 |
+| --- | --- | --- |
+| 张量数值 | 量化前后的近似程度 | MSE、MAE、Relative L2、SQNR |
+| 层输出 | 误差在哪些层被放大 | Output MSE、Cosine Similarity |
+| 输出分布 | token 决策是否改变 | Logits MSE、KL 散度、Top-k 重合率 |
+| 模型能力 | 最终任务是否退化 | PPL、Accuracy、F1、pass@1 |
+| 系统收益 | 部署是否真正获益 | 显存、TTFT、TPOT、吞吐、功耗 |
+
+例如张量均方误差和相对 L2 误差分别为：
+
+$$
+\operatorname{MSE}
+=\frac{1}{N}\sum_{i=1}^{N}(x_i-\hat{x}_i)^2,
+$$
+
+$$
+\operatorname{RelativeL2}
+=\frac{\|X-\hat{X}\|_2}{\|X\|_2}.
+$$
+
+余弦相似度更关注方向是否一致：
+
+$$
+\cos(X,\hat{X})
+=\frac{X\cdot\hat{X}}{\|X\|_2\|\hat{X}\|_2}.
+$$
+
+语言模型还应比较困惑度：
+
+$$
+\operatorname{PPL}
+=\exp\left(
+-\frac{1}{N}\sum_{i=1}^{N}\log p(x_i\mid x_{\lt i})
+\right).
+$$
+
+评测浮点模型与量化模型时，必须固定 prompt、tokenizer、生成参数、数据集和评测脚本。开放式生成还需要检查事实性、指令遵循、长文本稳定性、代码可执行性等；单独使用 LLM-as-a-judge 不足以得出可靠结论。
+
+## 均匀线性量化并不是唯一方案
+
+前文的线性量化使用等间距网格：
+
+$$
+\hat{x}_{q+1}-\hat{x}_q=s.
+$$
+
+如果数据大量集中在 0 附近，可以让 0 附近的离散值更密、远离 0 的区域更疏。码本量化、k-means 量化、对数量化、NormalFloat 和向量量化都属于非均匀或结构化的离散表示思路。
+
+这些方法可能更贴合数据分布，但通常需要码本查找、索引或更复杂的硬件实现。选择量化格式时，数值误差只是一个维度，硬件与 kernel 支持同样重要。
+
+## 常见误区
+
+1. **INT4 模型一定比 FP16 快 4 倍。** 位宽只决定理论数据量，真实速度还受硬件、kernel、解包和工作负载限制。
+2. **反量化会还原原始值。** 反量化只能恢复量化网格上的近似值，舍入和截断造成的信息已经丢失。
+3. **量化只影响权重。** 激活、KV Cache 和中间累加也可以采用不同精度；W4A16、W8A8 等命名正是在区分权重与激活位宽。
+4. **量化误差小，模型质量就一定不变。** 小的局部误差可能跨层放大，也可能改变 logits 排名和最终生成结果。
+5. **低精度数据都属于整数线性量化。** FP8、NormalFloat、码本与向量量化有不同的表示和计算机制，不能套用同一组公式。
+
+## 总结
+
+模型量化的本质是离散化：用有限编码近似连续浮点值。scale 决定网格间距，zero point 决定网格原点；对称量化实现简单，非对称量化更充分地利用偏斜范围。进入矩阵乘法后，低精度整数乘法通常配合更高精度累加，并在输出阶段恢复数值尺度。
+
+量化是否成功，最终取决于两个条件：模型质量损失是否可接受，以及目标硬件上的显存、延迟和吞吐是否真的改善。只有把数值误差、模型能力和系统性能放在一起评估，才有意义。
+
+## 参考
+
+1. [NVIDIA TensorRT：Working with Quantized Types](https://docs.nvidia.com/deeplearning/tensorrt/10.x.x/inference-library/work-quantized-types.html)
+2. [PyTorch：Static Quantization](https://docs.pytorch.org/ao/stable/eager_tutorials/static_quantization.html)
+3. [Jacob et al.：Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference](https://arxiv.org/abs/1712.05877)
+4. [Xiao et al.：SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models](https://arxiv.org/abs/2211.10438)
+
