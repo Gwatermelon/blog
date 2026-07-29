@@ -348,13 +348,24 @@ $$
 \mathbf{w}+\delta\mathbf{w}.
 $$
 
-我们想知道剪枝会使损失函数增加多少：
+我们想知道剪枝引起的参数变化 $\delta\mathbf{w}$ 会使损失增加多少，也就是计算：
 
 $$
 \Delta L=L(\mathbf{w}+\delta\mathbf{w})-L(\mathbf{w}).
 $$
 
-在当前参数附近，对损失函数进行泰勒展开：
+如果为每个候选权重都实际执行一次剪枝，再重新运行数据集计算 $L(\mathbf{w}+\delta\mathbf{w})$，评估成本会非常高。因此，OBD 不直接逐个试删，而是在当前参数 $\mathbf{w}$ 附近对剪枝后的损失 $L(\mathbf{w}+\delta\mathbf{w})$ 进行泰勒展开：
+
+$$
+L(\mathbf{w}+\delta\mathbf{w})
+\approx
+L(\mathbf{w})
++\nabla L(\mathbf{w})^T\delta\mathbf{w}
++\frac{1}{2}\delta\mathbf{w}^TH\delta\mathbf{w}
++O(\|\delta\mathbf{w}\|^3).
+$$
+
+将等式两边同时减去剪枝前的损失 $L(\mathbf{w})$，就得到损失增量 $\Delta L$ 的近似：
 
 $$
 \Delta L
