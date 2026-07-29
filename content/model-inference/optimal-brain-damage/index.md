@@ -152,6 +152,18 @@ $$
 
 ## OBD：Optimal Brain Damage
 
+OBD 说白了就是：
+
+> 利用损失函数的二阶泰勒展开，估计修改某个权重会对损失造成多大影响。
+
+但更准确地说，OBD 针对的是一种特定的参数修改：把某个权重从 $w_q$ 修改为：
+
+$$
+w_q'=0.
+$$
+
+也就是进行权重剪枝。OBD 要估计的，正是这次置零操作会使损失增加多少。
+
 ### OBD 要解决什么问题
 
 一个训练好的神经网络通常包含大量权重。为了减小模型规模和计算量，我们希望将一些不重要的权重设置为零，也就是进行权重剪枝。
@@ -744,6 +756,70 @@ OBD 的推导依赖几个关键近似：
 
 这些近似让 OBD 的计算从理论上不可承受的完整 Hessian，简化为每个权重一个独立分数。但它也带来局限：当模型尚未收敛、剪枝扰动很大，或参数之间存在明显耦合时，$\frac{1}{2}H_{qq}w_q^2$ 可能无法准确预测真实损失变化。
 
+### OBD 的主要问题：忽略 Hessian 非对角元素
+
+OBD 最关键的局限来自 Hessian 对角近似。完整 Hessian 的非对角元素为：
+
+$$
+H_{ij}
+=\frac{\partial^2L}{\partial w_i\partial w_j},
+\qquad i\ne j.
+$$
+
+它描述参数 $w_i$ 与 $w_j$ 在损失曲率上的耦合关系。直观地说，非对角元素反映的是：
+
+> 改变或删除 $w_i$ 后，能否通过调整 $w_j$ 以及其他权重来补偿这次扰动。
+
+完整的二阶损失变化包含交叉项：
+
+$$
+\Delta L
+\approx
+\frac{1}{2}
+\sum_i H_{ii}\delta w_i^2
++\frac{1}{2}
+\sum_{i\ne j}H_{ij}\delta w_i\delta w_j.
+$$
+
+OBD 忽略第二部分，只用：
+
+$$
+\Delta L_{\mathrm{OBD}}
+\approx
+\frac{1}{2}
+\sum_iH_{ii}\delta w_i^2.
+$$
+
+这相当于把每个权重看成可以独立评分的参数。删除 $w_q$ 时，OBD 只考虑 $\delta w_q=-w_q$，没有利用其他参数的联合调整来寻找损失更小的补偿方向。
+
+现实中的神经网络参数通常高度相关，Hessian 一般不是对角矩阵。当非对角项不可忽略时，两个问题会随之出现：
+
+1. **损失增量估计不准**：$\frac{1}{2}H_{qq}w_q^2$ 可能高估或低估删除 $w_q$ 后的真实损失变化；
+2. **权重排序可能错误**：某个按 OBD 分数看似不重要的权重，可能通过非对角耦合影响许多其他参数，最终导致 OBD 删除错误的权重。
+
+Optimal Brain Surgeon（OBS）正是针对这一问题提出的。它不要求 Hessian 是对角矩阵，而是在删除 $w_q$ 的约束下，允许其他权重共同调整：
+
+$$
+\min_{\delta\mathbf{w}}
+\frac{1}{2}\delta\mathbf{w}^TH\delta\mathbf{w},
+\qquad
+\mathbf{e}_q^T\delta\mathbf{w}+w_q=0.
+$$
+
+其中 $\mathbf{e}_q$ 是第 $q$ 个坐标方向的单位向量。这个约束保证更新后 $w_q$ 变为零，而优化过程可以利用其余参数对剪枝扰动进行补偿。对应的最优参数变化和损失增量为：
+
+$$
+\delta\mathbf{w}^*
+=-\frac{w_q}{[H^{-1}]_{qq}}H^{-1}\mathbf{e}_q,
+$$
+
+$$
+\Delta L_q^{\mathrm{OBS}}
+=\frac{w_q^2}{2[H^{-1}]_{qq}}.
+$$
+
+OBS 原始论文指出，其考察问题中的 Hessian 呈明显的非对角结构，许多非对角项与对角项处于可比量级；论文将这种结构视为 OBD 经常选择错误剪枝权重的重要原因。换句话说，OBD 的问题并非使用二阶信息这个方向不对，而是为了计算简单而丢弃了二阶信息中的参数耦合部分。
+
 ## 总结
 
 OBD 的推理链条可以概括为：
@@ -767,4 +843,5 @@ $$
 ## 参考资料
 
 - [Optimal Brain Damage（NeurIPS Proceedings）](https://proceedings.neurips.cc/paper/1989/hash/6c9882bbac1c7093bd25041881277658-Abstract.html)
+- [Second Order Derivatives for Network Pruning: Optimal Brain Surgeon（NeurIPS Proceedings）](https://proceedings.neurips.cc/paper/1992/hash/303ed4c69846ab36c2904d3ba8573050-Abstract.html)
 
