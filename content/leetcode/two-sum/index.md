@@ -1,11 +1,15 @@
 ---
 title: "1. 两数之和"
 date: 2026-08-08
+lastmod: 2026-08-08
 draft: false
 description: "记录两数之和的哈希表一次遍历写法：遍历当前数字时，在哈希表中查找 target - 当前值是否已经出现。"
+summary: "两数之和可以用哈希表在一次遍历中完成：遍历当前数字时，查找 target - 当前值是否已经出现，若存在就返回两个下标。"
 categories: ["LeetCode"]
 tags: ["哈希表", "数组", "算法题"]
 series: ["LeetCode"]
+ShowToc: true
+TocOpen: true
 ---
 
 题目：[1. 两数之和 - 力扣（LeetCode）](https://leetcode.cn/problems/two-sum/description/?envType=study-plan-v2&envId=top-100-liked)
