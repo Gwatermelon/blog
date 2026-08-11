@@ -36,3 +36,12 @@ jobs:
 
       - name: Validate and build production site
         run: bash scripts/build-site.sh
+
+      - name: Install browser test dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser smoke tests
+        run: npm run test:e2e

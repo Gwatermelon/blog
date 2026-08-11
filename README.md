@@ -55,6 +55,16 @@ bash scripts/build-site.sh
 
 GitHub Actions 会在提交和 Pull Request 上执行相同检查，包括文章元数据、本地图片、内部链接、品牌资源、结构化数据和关键页面功能。
 
+代码必须通过 Pull Request 合入 `main`。CI 还会使用 Playwright 在桌面与移动视口检查首页、OBS 公式渲染和 Todo 状态持久化。每日生产验收会检查自定义域名、关键文章以及 `pages.dev` 永久跳转；该检查失败通常表示 Cloudflare 控制台配置与仓库要求发生了漂移。
+
+本地运行浏览器测试：
+
+```powershell
+npm ci
+npx playwright install chromium
+npm run test:e2e
+```
+
 ## 许可
 
 网站程序代码使用 [MIT License](LICENSE)。原创文章与图片适用 [内容版权说明](CONTENT_LICENSE.md)，第三方材料仍归原权利人所有。

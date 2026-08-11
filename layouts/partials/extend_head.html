@@ -1,3 +1,8 @@
+{{- /* Keep this minimum aligned with the pinned version in .hugo-version. */ -}}
+{{- if lt hugo.Version "0.163.3" }}
+{{- errorf "=> hugo v0.163.3 or greater is required to build this site " }}
+{{- end -}}
+
 {{- if .Params.math }}
 <script>
   window.MathJax = {
