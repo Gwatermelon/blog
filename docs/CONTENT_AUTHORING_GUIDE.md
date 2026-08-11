@@ -13,9 +13,10 @@
 | 想写的内容 | 放入目录 | 复制的模板 |
 | --- | --- | --- |
 | 普通技术文章、工作总结 | `content/posts/` | `docs/templates/posts.md` |
-| 数学、机器学习、Transformer 基础 | `content/ai-fundamentals/` | `docs/templates/ai-fundamentals.md` |
+| 机器学习、Transformer 基础 | `content/ai-fundamentals/` | `docs/templates/ai-fundamentals.md` |
 | 大模型推理、KV Cache、量化、服务优化 | `content/model-inference/` | `docs/templates/model-inference.md` |
 | 论文阅读与复现笔记 | `content/papers/` | `docs/templates/papers.md` |
+| 数学概念、公式推导与数学直觉 | `content/math/` | `docs/templates/math.md` |
 | LeetCode 解题记录 | `content/leetcode/` | `docs/templates/leetcode.md` |
 
 无论文章放在哪个模块，发布后都会自动出现在「文章归档」中，并按日期从新到旧排列。
@@ -86,6 +87,13 @@ Copy-Item "docs\templates\model-inference.md" "content\model-inference\my-infere
 ```powershell
 New-Item -ItemType Directory -Path "content\papers\paper-short-name"
 Copy-Item "docs\templates\papers.md" "content\papers\paper-short-name\index.md"
+```
+
+### 数学知识
+
+```powershell
+New-Item -ItemType Directory -Path "content\math\my-math-topic"
+Copy-Item "docs\templates\math.md" "content\math\my-math-topic\index.md"
 ```
 
 ### LeetCode
@@ -235,6 +243,12 @@ hugo --cleanDestinationDir --gc --minify --panicOnWarning
 powershell -ExecutionPolicy Bypass -File scripts\validate-site.ps1 -PublicDir public
 ```
 
+在 Bash 环境中可以运行与 CI、Cloudflare Pages 相同的完整流程：
+
+```bash
+bash scripts/build-site.sh
+```
+
 `public/` 是本地生成目录，已被 Git 忽略，不需要手动修改或提交。
 
 ## 9. 发布前检查
@@ -248,7 +262,7 @@ powershell -ExecutionPolicy Bypass -File scripts\validate-site.ps1 -PublicDir pu
 - [ ] 本地预览没有报错；
 - [ ] 没有修改 `public/`、`themes/` 或页面模板。
 
-代码提交到 GitHub 的 `main` 分支后，Cloudflare Pages 会自动构建并发布到 <https://zhangge.dev/>。
+代码提交到 GitHub 的 `main` 分支后，Cloudflare Pages 会自动构建并发布到 <https://zhangge.dev/>。Cloudflare 的构建命令必须设置为 `bash scripts/build-site.sh`，并在 Production 与 Preview 环境中把 `HUGO_VERSION` 设置为根目录 `.hugo-version` 中的值。
 
 ## 10. 常见问题
 

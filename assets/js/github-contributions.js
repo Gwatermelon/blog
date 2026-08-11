@@ -81,8 +81,12 @@
     scroll?.scrollTo({ left: scroll.scrollWidth });
   };
 
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 8000);
+
   fetch(`https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=last`, {
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json' },
+    signal: controller.signal
   })
     .then((response) => {
       if (!response.ok) throw new Error(`GitHub contributions request failed: ${response.status}`);
@@ -96,5 +100,6 @@
       summary.textContent = '贡献记录暂时不可用';
       calendar.hidden = true;
       if (fallback) fallback.hidden = false;
-    });
+    })
+    .finally(() => window.clearTimeout(timeout));
 })();

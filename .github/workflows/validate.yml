@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -34,13 +34,5 @@ jobs:
           sudo install hugo /usr/local/bin/hugo
           hugo version
 
-      - name: Validate source content
-        shell: pwsh
-        run: ./scripts/validate-site.ps1
-
-      - name: Build production site
-        run: hugo --cleanDestinationDir --gc --minify --panicOnWarning
-
-      - name: Validate generated site
-        shell: pwsh
-        run: ./scripts/validate-site.ps1 -PublicDir public
+      - name: Validate and build production site
+        run: bash scripts/build-site.sh

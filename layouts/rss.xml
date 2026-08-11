@@ -1,4 +1,4 @@
-{{- /* PaperMod compatibility override for Hugo's current language API. */ -}}
+{{- /* PaperMod compatibility override: use the configured locale instead of the deprecated LanguageCode API. */ -}}
 {{- $authorEmail := "" }}
 {{- with site.Params.author }}
   {{- if reflect.IsMap . }}

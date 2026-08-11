@@ -1,4 +1,4 @@
-{{- /* PaperMod compatibility override for Hugo's current language API. */ -}}
+{{- /* PaperMod compatibility override: use locale instead of the deprecated LanguageCode API. */ -}}
 <meta property="og:url" content="{{ .Permalink }}">
 
 {{- with or site.Title site.Params.title | plainify }}

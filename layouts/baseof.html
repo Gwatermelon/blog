@@ -1,6 +1,6 @@
-{{- /* PaperMod compatibility override for Hugo's current language API. */ -}}
-{{- if lt hugo.Version "0.146.0" }}
-{{- errorf "=> hugo v0.146.0 or greater is required for hugo-PaperMod to build " }}
+{{- /* Keep this minimum aligned with the pinned version in .hugo-version. */ -}}
+{{- if lt hugo.Version "0.163.3" }}
+{{- errorf "=> hugo v0.163.3 or greater is required to build this site " }}
 {{- end -}}
 
 <!DOCTYPE html>
