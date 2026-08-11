@@ -110,9 +110,13 @@ if (/^\s*unsafe\s*=\s*true\s*$/m.test(config)) {
   addIssue('hugo.toml must not enable unsafe Markdown rendering');
 }
 
+const headExtension = readText(path.join(root, 'layouts', 'partials', 'extend_head.html'));
+if (!headExtension.includes(`lt hugo.Version "${pinnedHugoVersion}"`)) {
+  addIssue('layouts/partials/extend_head.html must enforce the version pinned in .hugo-version');
+}
 const baseTemplate = readText(path.join(root, 'layouts', 'baseof.html'));
-if (!baseTemplate.includes(`lt hugo.Version "${pinnedHugoVersion}"`)) {
-  addIssue('layouts/baseof.html must enforce the version pinned in .hugo-version');
+if (!baseTemplate.includes('.Language.Direction') || baseTemplate.includes('.Language.LanguageDirection')) {
+  addIssue('layouts/baseof.html must retain the Hugo-compatible language direction accessor');
 }
 
 const requiredArticleFields = [
@@ -304,6 +308,7 @@ if (publicDir) {
       if (!/class=github-contributions/.test(homeHtml)) addIssue('Home page is missing the GitHub contributions calendar');
       if (!/\/js\/github-contributions\.min\.[a-f0-9]+\.js/.test(homeHtml)) addIssue('Home page is missing its fingerprinted GitHub contributions script');
       if (/class="first-entry home-info"/.test(homeHtml)) addIssue('Home page must not render the removed profile card');
+      if (!/class=home-layout/.test(homeHtml)) addIssue('Home page is missing its dedicated layout');
     }
 
     const todoGeneratedPath = path.join(publicRoot, 'todo', 'index.html');
