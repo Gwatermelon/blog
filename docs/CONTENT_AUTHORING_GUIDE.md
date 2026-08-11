@@ -248,7 +248,7 @@ powershell -ExecutionPolicy Bypass -File scripts\validate-site.ps1 -PublicDir pu
 - [ ] 本地预览没有报错；
 - [ ] 没有修改 `public/`、`themes/` 或页面模板。
 
-代码提交到 GitHub 的 `main` 分支后，Cloudflare Pages 会自动构建并发布到 <https://blog-shf.pages.dev>。
+代码提交到 GitHub 的 `main` 分支后，Cloudflare Pages 会自动构建并发布到 <https://zhangge.dev/>。
 
 ## 10. 常见问题
 

@@ -165,8 +165,8 @@ if ($PublicDir) {
           $match.Groups[3].Value
         }
         $url = $url.Replace('&amp;', '&')
-        if ($url.StartsWith('https://blog-shf.pages.dev')) {
-          $url = $url.Substring('https://blog-shf.pages.dev'.Length)
+        if ($url.StartsWith('https://zhangge.dev')) {
+          $url = $url.Substring('https://zhangge.dev'.Length)
         }
         if ($url -match '^(https?:)?//' -or $url -match '^(mailto:|tel:|javascript:|data:|#)') { continue }
 

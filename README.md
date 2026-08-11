@@ -6,7 +6,9 @@
 
 本项目托管在 **Cloudflare Pages**，内容持续更新并发布到以下地址：
 
-**每日产出：<https://blog-shf.pages.dev>**
+**个人域名：<https://zhangge.dev/>**
+
+**Cloudflare Pages：<https://blog-shf.pages.dev>**
 
 **GitHub 代码仓库：<https://github.com/Gwatermelon/blog>**
 
@@ -28,7 +30,7 @@ hugo.toml    站点配置
 
 ## 部署说明
 
-代码更新后由 Cloudflare Pages 构建并发布，线上站点以 <https://blog-shf.pages.dev> 的内容为准。部署配置应保持：
+代码更新后由 Cloudflare Pages 构建并发布，线上站点以 <https://zhangge.dev/> 的内容为准。部署配置应保持：
 
 - 构建命令：`hugo --cleanDestinationDir --gc --minify --panicOnWarning`
 - 输出目录：`public`

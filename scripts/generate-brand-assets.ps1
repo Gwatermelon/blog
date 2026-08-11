@@ -116,7 +116,7 @@ function Write-SocialCard([string]$Path) {
     $graphics.DrawString('TECHNICAL NOTES', $subtitleFont, $blue, 76, 294)
     $graphics.DrawString('AI FUNDAMENTALS  /  LLM INFERENCE', $bodyFont, $muted, 76, 374)
     $graphics.DrawString('PROGRAM ANALYSIS  /  KERNEL OPTIMIZATION', $bodyFont, $muted, 76, 412)
-    $graphics.DrawString('blog-shf.pages.dev', $smallFont, $muted, 76, 520)
+    $graphics.DrawString('zhangge.dev', $smallFont, $muted, 76, 520)
 
     $graphics.FillRectangle($blue, 905, 118, 180, 18)
     $graphics.FillRectangle($teal, 905, 174, 118, 18)
