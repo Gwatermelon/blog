@@ -16,6 +16,7 @@
 content/     博客文章与研究笔记
 layouts/     自定义页面模板
 assets/      自定义样式与脚本资源
+functions/   Cloudflare Pages 请求中间件
 static/      品牌图标与社交分享图片
 scripts/     内容、构建产物与品牌资源校验脚本
 themes/      Hugo 主题
@@ -32,10 +33,10 @@ hugo.toml    站点配置
 
 - 构建命令：`bash scripts/build-site.sh`
 - 输出目录：`public`
-- Production 和 Preview 环境变量 `HUGO_VERSION`：与根目录 `.hugo-version` 一致
+- Production 和 Preview 环境变量 `HUGO_VERSION`：建议与根目录 `.hugo-version` 一致
 - Git 子模块：启用递归拉取
 
-统一构建脚本会校验 Hugo 版本、文章元数据、公式配置、图片和内部链接。任一检查失败时必须终止部署。Cloudflare Pages 默认域名 `blog-shf.pages.dev` 应通过 Cloudflare Redirect Rule 或 Bulk Redirect 永久跳转到 `https://zhangge.dev/`；Pages 的静态 `_redirects` 文件不支持按来源域名匹配，不能用于这项整站跳转。
+统一构建脚本会校验 Hugo 版本、文章元数据、公式配置、图片和内部链接。Linux 构建环境没有固定版本时，脚本会从 Hugo 官方 Release 下载对应版本并校验 SHA256，因此正式构建不再依赖 Cloudflare 预装版本。模板同时保持与 Cloudflare 当前默认 Hugo 的兼容性，避免平台误用默认命令时直接中断部署。任一检查失败时必须终止部署。根目录 `functions/_middleware.js` 会把 Cloudflare Pages 默认域名 `blog-shf.pages.dev` 永久跳转到 `https://zhangge.dev/`，并保留请求路径和查询参数。
 
 `public/` 和 `.hugo_build.lock` 是本地构建产物，不纳入版本控制。
 
@@ -74,4 +75,3 @@ npm run test:e2e
 ### 内容尽力去保证一次性理解和记录完整
 ### 可以写的慢一些，但是信息要准确
 ### 最后相信世界是个草台班子，不必内耗，专注提升自己
-
