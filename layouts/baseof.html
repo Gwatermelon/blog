@@ -1,13 +1,13 @@
-{{- /* PaperMod still uses the removed LanguageDirection accessor. Keep this
-      file aligned with the upstream base template until the theme migrates. */ -}}
+{{- /* PaperMod's language direction accessors differ across supported Hugo
+      versions. The browser resolves auto correctly for this LTR site. */ -}}
 <!DOCTYPE html>
 {{- $theme := site.Params.defaultTheme | default "auto" }}
 {{- if eq $theme "dark" }}
-<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="dark">
+<html lang="{{ site.Language }}" dir="auto" data-theme="dark">
 {{- else if eq $theme "light" }}
-<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="light">
+<html lang="{{ site.Language }}" dir="auto" data-theme="light">
 {{- else }}
-<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="auto">
+<html lang="{{ site.Language }}" dir="auto" data-theme="auto">
 {{- end }}
 
 <head>

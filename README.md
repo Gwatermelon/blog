@@ -36,7 +36,7 @@ hugo.toml    站点配置
 - Production 和 Preview 环境变量 `HUGO_VERSION`：建议与根目录 `.hugo-version` 一致
 - Git 子模块：启用递归拉取
 
-统一构建脚本会校验 Hugo 版本、文章元数据、公式配置、图片和内部链接。Linux 构建环境没有固定版本时，脚本会从 Hugo 官方 Release 下载对应版本并校验 SHA256，因此部署不再依赖 Cloudflare 预装版本。任一检查失败时必须终止部署。根目录 `functions/_middleware.js` 会把 Cloudflare Pages 默认域名 `blog-shf.pages.dev` 永久跳转到 `https://zhangge.dev/`，并保留请求路径和查询参数。
+统一构建脚本会校验 Hugo 版本、文章元数据、公式配置、图片和内部链接。Linux 构建环境没有固定版本时，脚本会从 Hugo 官方 Release 下载对应版本并校验 SHA256，因此正式构建不再依赖 Cloudflare 预装版本。模板同时保持与 Cloudflare 当前默认 Hugo 的兼容性，避免平台误用默认命令时直接中断部署。任一检查失败时必须终止部署。根目录 `functions/_middleware.js` 会把 Cloudflare Pages 默认域名 `blog-shf.pages.dev` 永久跳转到 `https://zhangge.dev/`，并保留请求路径和查询参数。
 
 `public/` 和 `.hugo_build.lock` 是本地构建产物，不纳入版本控制。
 

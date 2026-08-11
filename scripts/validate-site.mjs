@@ -110,13 +110,9 @@ if (/^\s*unsafe\s*=\s*true\s*$/m.test(config)) {
   addIssue('hugo.toml must not enable unsafe Markdown rendering');
 }
 
-const headExtension = readText(path.join(root, 'layouts', 'partials', 'extend_head.html'));
-if (!headExtension.includes(`lt hugo.Version "${pinnedHugoVersion}"`)) {
-  addIssue('layouts/partials/extend_head.html must enforce the version pinned in .hugo-version');
-}
 const baseTemplate = readText(path.join(root, 'layouts', 'baseof.html'));
-if (!baseTemplate.includes('.Language.Direction') || baseTemplate.includes('.Language.LanguageDirection')) {
-  addIssue('layouts/baseof.html must retain the Hugo-compatible language direction accessor');
+if (!baseTemplate.includes('dir="auto"') || /\.Language\.(?:Direction|LanguageDirection)/.test(baseTemplate)) {
+  addIssue('layouts/baseof.html must use a Hugo-version-independent language direction');
 }
 
 const requiredArticleFields = [
