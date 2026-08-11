@@ -149,6 +149,12 @@ if ($PublicDir) {
       if ($html.Contains('0001-01-01T00:00:00')) {
         Add-Issue "$(Get-RelativePath $publicRoot $file.FullName) contains a zero structured-data date"
       }
+      if ($html -match '<h[1-6][^>]*>\s*(?:\$\$|\\)') {
+        Add-Issue "$(Get-RelativePath $publicRoot $file.FullName) contains a formula parsed as a heading"
+      }
+      if ($html -match '(?:<p>\s*\$\$|\$\$\s*</p>)') {
+        Add-Issue "$(Get-RelativePath $publicRoot $file.FullName) contains an unprocessed display math delimiter"
+      }
 
       foreach ($match in [regex]::Matches($html, '(?i)(?:href|src)=(?:"([^"]+)"|''([^'']+)''|([^\s>]+))')) {
         $url = if ($match.Groups[1].Success) {

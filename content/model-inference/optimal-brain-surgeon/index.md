@@ -174,8 +174,7 @@ $$
 在模型已经训练到局部最优点附近时，一阶梯度近似为零，损失变化可以用二阶项近似：
 
 $$
-\Delta L
-\approx
+\Delta L \approx
 \frac{1}{2}\delta\mathbf{w}^TH\delta\mathbf{w}.
 $$
 
@@ -227,8 +226,7 @@ $$
 二阶损失增量为：
 
 $$
-\Delta L
-=
+\Delta L =
 \frac{1}{2}
 \begin{bmatrix}
 \Delta w_1 & \Delta w_2
@@ -246,16 +244,14 @@ $$
 展开得到：
 
 $$
-\Delta L
-=
+\Delta L =
 \Delta w_1^2+\Delta w_1\Delta w_2+\Delta w_2^2.
 $$
 
 把删除约束 $\Delta w_1=-1$ 代入：
 
 $$
-\Delta L
-=
+\Delta L =
 1-\Delta w_2+\Delta w_2^2.
 $$
 
@@ -269,8 +265,7 @@ $$
 对 $\Delta w_2$ 求导：
 
 $$
-\frac{\partial \Delta L}{\partial \Delta w_2}
-=
+\frac{\partial \Delta L}{\partial \Delta w_2} =
 -1+2\Delta w_2.
 $$
 
@@ -353,8 +348,7 @@ $$
 
 $$
 \boxed{
-\delta\mathbf{w}^*
-=
+\delta\mathbf{w}^* =
 -\frac{w_q}{[H^{-1}]_{qq}}H^{-1}\mathbf{e}_q
 }.
 $$
@@ -363,8 +357,7 @@ $$
 
 $$
 \boxed{
-\Delta L_q^{\mathrm{OBS}}
-=
+\Delta L_q^{\mathrm{OBS}} =
 \frac{w_q^2}{2[H^{-1}]_{qq}}
 }.
 $$
@@ -391,8 +384,7 @@ $$
 OBD 的权重显著性为：
 
 $$
-S_q^{\mathrm{OBD}}
-=
+S_q^{\mathrm{OBD}} =
 \frac{1}{2}H_{qq}w_q^2.
 $$
 
@@ -401,8 +393,7 @@ $$
 OBS 的显著性为：
 
 $$
-S_q^{\mathrm{OBS}}
-=
+S_q^{\mathrm{OBS}} =
 \frac{w_q^2}{2[H^{-1}]_{qq}}.
 $$
 
@@ -461,12 +452,10 @@ OBD 的简化让每个权重可以独立打分，计算更便宜，但会丢掉�
 最终可以记住这两个公式：
 
 $$
-S_q^{\mathrm{OBD}}
-=
+S_q^{\mathrm{OBD}} =
 \frac{1}{2}H_{qq}w_q^2,
 \qquad
-S_q^{\mathrm{OBS}}
-=
+S_q^{\mathrm{OBS}} =
 \frac{w_q^2}{2[H^{-1}]_{qq}}.
 $$
 
