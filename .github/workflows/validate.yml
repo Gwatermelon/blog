@@ -19,26 +19,14 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install pinned Hugo Extended
-        shell: bash
-        run: |
-          set -euo pipefail
-          version="$(tr -d '\r\n' < .hugo-version)"
-          asset="hugo_extended_${version}_linux-amd64.tar.gz"
-          base="https://github.com/gohugoio/hugo/releases/download/v${version}"
-          curl --fail --location --silent --show-error "${base}/${asset}" --output "${RUNNER_TEMP}/${asset}"
-          curl --fail --location --silent --show-error "${base}/hugo_${version}_checksums.txt" --output "${RUNNER_TEMP}/checksums.txt"
-          cd "${RUNNER_TEMP}"
-          grep " ${asset}$" checksums.txt | sha256sum --check --strict
-          tar --extract --gzip --file "${asset}" hugo
-          sudo install hugo /usr/local/bin/hugo
-          hugo version
-
       - name: Validate and build production site
         run: bash scripts/build-site.sh
 
       - name: Install browser test dependencies
         run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium

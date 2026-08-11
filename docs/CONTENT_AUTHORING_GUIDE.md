@@ -262,7 +262,7 @@ bash scripts/build-site.sh
 - [ ] 本地预览没有报错；
 - [ ] 没有修改 `public/`、`themes/` 或页面模板。
 
-代码通过 Pull Request 合入 GitHub 的 `main` 分支后，Cloudflare Pages 会自动构建并发布到 <https://zhangge.dev/>。Pull Request 必须通过 `build` 检查。Cloudflare 的构建命令必须设置为 `bash scripts/build-site.sh`，并在 Production 与 Preview 环境中把 `HUGO_VERSION` 设置为根目录 `.hugo-version` 中的值。
+代码通过 Pull Request 合入 GitHub 的 `main` 分支后，Cloudflare Pages 会自动构建并发布到 <https://zhangge.dev/>。Pull Request 必须通过 `build` 检查。Cloudflare 的构建命令必须设置为 `bash scripts/build-site.sh`；建议在 Production 与 Preview 环境中把 `HUGO_VERSION` 设置为根目录 `.hugo-version` 中的值，未设置或版本不匹配时脚本会在 Linux 构建环境自动安装固定版本。
 
 ## 10. 常见问题
 
