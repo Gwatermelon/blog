@@ -1,7 +1,7 @@
 ---
 title: "Research Todo"
 date: 2026-07-16
-lastmod: 2026-07-23
+lastmod: 2026-08-13
 description: "记录当前真正需要推进的算法题、数学知识、推理加速问题和算子实现任务。"
 layout: "todo"
 ShowToc: false
@@ -28,6 +28,15 @@ taskGroups:
       - id: "ai-stable-latent-moe"
         text: "stable LatentMoE"
         note: "梳理 LatentMoE 的稳定训练机制、路由方式与模型容量收益"
+      - id: "ai-gshard"
+        text: "GShard"
+        note: "研读稀疏专家模型、自动分片策略、门控路由与大规模训练工程取舍"
+      - id: "ai-switch-transformer"
+        text: "Switch Transformer"
+        note: "梳理单专家路由、负载均衡损失、容量因子与 GShard 的结构差异"
+      - id: "ai-deepseek-v4-architecture"
+        text: "deepseek v4 结构研读"
+        note: "跟踪 DeepSeek v4 架构公开资料，整理 MoE、注意力、训练与推理层面的关键设计"
   - title: "数学知识"
     subtitle: "补齐理解模型结构、训练过程与优化方法所需的数学基础"
     tasks: []
@@ -42,5 +51,5 @@ taskGroups:
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
 ---
 
-这 6 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+这 9 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
 
