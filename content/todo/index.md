@@ -49,6 +49,9 @@ taskGroups:
       - id: "inference-read-quarot-spinquant"
         text: "阅读 QuaRot / SpinQuant"
         note: "梳理旋转变换在量化中的作用，比较 QuaRot 与 SpinQuant 对异常值、权重量化和激活量化的处理方式"
+      - id: "inference-read-smoothquant"
+        text: "阅读 SmoothQuant"
+        note: "研读 SmoothQuant 如何通过平滑激活异常值实现 W8A8 量化，并对比 AWQ、GPTQ、QuaRot 等方法的适用边界"
   - title: "算子实现与优化"
     subtitle: "从数学定义走到面向硬件的高效实现"
     tasks:
@@ -57,5 +60,5 @@ taskGroups:
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
 ---
 
-这 11 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+这 12 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
 
