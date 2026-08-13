@@ -42,7 +42,13 @@ taskGroups:
     tasks: []
   - title: "大模型推理加速"
     subtitle: "围绕投机推理与缓存机制回答关键问题"
-    tasks: []
+    tasks:
+      - id: "inference-read-autoround"
+        text: "阅读 AutoRound"
+        note: "研读 AutoRound 的低比特量化思路、舍入优化目标、校准流程与 AWQ/GPTQ 等方法的差异"
+      - id: "inference-read-quarot-spinquant"
+        text: "阅读 QuaRot / SpinQuant"
+        note: "梳理旋转变换在量化中的作用，比较 QuaRot 与 SpinQuant 对异常值、权重量化和激活量化的处理方式"
   - title: "算子实现与优化"
     subtitle: "从数学定义走到面向硬件的高效实现"
     tasks:
@@ -51,5 +57,5 @@ taskGroups:
         note: "讲清 IO-aware 思路、分块计算与在线 Softmax"
 ---
 
-这 9 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
+这 11 项是当前预置任务。你也可以在页面底部选择分类并添加新的研究事项；自定义事项和勾选状态均保存在当前浏览器中。
 
