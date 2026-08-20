@@ -1,0 +1,10 @@
+{{- $mainSections := site.Params.mainSections | default slice -}}
+{{- if and .IsPage (in $mainSections .Section) (not .Draft) -}}
+<section class="article-downloads" aria-label="文章下载">
+  <button class="article-downloads-word" type="button" data-docx-download>
+    <span class="article-downloads-icon" aria-hidden="true">W</span>
+    <span data-docx-download-label>下载 Word 文档</span>
+  </button>
+  <span class="article-downloads-status" data-docx-download-status aria-live="polite"></span>
+</section>
+{{- end -}}

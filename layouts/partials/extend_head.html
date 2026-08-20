@@ -19,3 +19,8 @@
 {{- $readingToc := resources.Get "js/reading-toc.js" | js.Build | resources.Minify | fingerprint }}
 <script defer crossorigin="anonymous" src="{{ $readingToc.RelPermalink }}" integrity="{{ $readingToc.Data.Integrity }}"></script>
 {{- end }}
+{{- $mainSections := site.Params.mainSections | default slice -}}
+{{- if and .IsPage (in $mainSections .Section) (not .Draft) }}
+{{- $articleDocx := resources.Get "js/article-docx-download.js" | js.Build | resources.Minify | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $articleDocx.RelPermalink }}" integrity="{{ $articleDocx.Data.Integrity }}"></script>
+{{- end }}
