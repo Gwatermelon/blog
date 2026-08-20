@@ -47,8 +47,9 @@ GPU3：完整模型
 比如部署一个 7B 模型，一张 A100 就能放下。现在同时来了 100 个请求，可以启动 4 份模型：
 
 ```text
-┌─ GPU0：Model -> 一部分请求
-Requests ──┼─ GPU1：Model -> 一部分请求
+Requests
+├─ GPU0：Model -> 一部分请求
+├─ GPU1：Model -> 一部分请求
 ├─ GPU2：Model -> 一部分请求
 └─ GPU3：Model -> 一部分请求
 ```
