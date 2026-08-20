@@ -295,6 +295,13 @@ if (publicDir) {
         if (!exists && !path.extname(candidate)) exists = fs.existsSync(path.join(candidate, 'index.html'));
         if (!exists) addIssue(`${relative} references missing local URL '${url}'`);
       }
+
+      if (expectedArticlePages.includes(relative)) {
+        if (!/data-docx-download/.test(html)) addIssue(`${relative} is missing its current-article Word download button`);
+        if (!/\/js\/article-docx-download\.min\.[a-f0-9]+\.js/.test(html)) {
+          addIssue(`${relative} is missing its fingerprinted current-article Word download script`);
+        }
+      }
     }
 
     for (const page of mathArticlePages) {
