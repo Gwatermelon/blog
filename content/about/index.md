@@ -1,14 +1,14 @@
 ---
 title: "关于我"
 date: 2026-07-16
-lastmod: 2026-07-17
+lastmod: 2026-08-20
 description: "张革的技术经历与研究方向，聚焦大模型推理加速、AI Agent、程序分析和自动算子优化。"
-summary: "高级工程师，主要从事大模型推理加速、AI Agent、程序分析和自动算子优化。"
+summary: "数据处理架构师，主要从事大模型推理加速、AI Agent、程序分析和自动算子优化。"
 layout: "single"
 ShowToc: true
 ---
 
-我是张革，目前从事大模型推理加速、AI Agent、程序分析与自动算子优化相关工作。近期重点关注 Qwen 系列模型的投机推理加速，以及基于 MCTS 的自动算子优化，覆盖算法设计、模型训练、推理框架适配、自动化评测和端到端性能优化。
+我是张革，目前从事大模型推理加速、AI Agent、程序分析与自动算子优化相关工作。近期重点关注 Qwen 系列模型投机推理加速，以及基于 MCTS 的自动算子优化，覆盖算法设计、模型训练、推理框架适配、自动化评测和端到端性能优化。
 
 联系方式：
 
@@ -18,29 +18,33 @@ ShowToc: true
 
 ## 工作经历
 
+### 北京字节跳动网络技术有限公司
+
+2026 年 8 月至今
+
+- 数据处理架构师
+
 ### 北京华为数字技术有限公司
 
-2022 年 1 月至今
+2022 年 1 月至 2026 年 7 月
 
-- 高级工程师 / Committer，2026 年至今
+- 高级工程师 16 级 / Committer，2026 年至 2026 年 7 月
 - 工程师 / Committer，2024 年至 2026 年
 - 工程师，2022 年至 2024 年
 
-### 滴滴出行
-
-2021 年 7 月至 2021 年 10 月，实习
-
 ## 项目经历
+
+以下项目经历主要来自华为阶段。
 
 ### 大模型推理加速
 
-2026 年至今，Team Leader
+2026 年，Team Leader
 
 - 负责 Qwen3 / Qwen3.5 系列大模型投机推理加速，基于 vLLM Speculators 完成 EAGLE-3 草稿模型训练、推理适配与端到端验证。
-- 在中英混合数据集上提升草稿接受长度，并取得优于公开基线的效果。
+- 在中英混合数据集上实现接受步长 3.5 的性能收益，效果高于开源 EAGLE-3 模型。
 - 基于 FrSpec 设计并实现 Qwen3.5 MTP 一键式推理优化流程，通过调整 vLLM 中草稿模型的词表范围降低草稿阶段推理耗时。
-- 该流程在单请求和并发场景下均获得稳定的端到端性能收益。
-- 面向 Qwen3.5 系列训练 DFlash 草稿模型，建立草稿质量、接受率、吞吐和延迟等评测流程。
+- 该流程在单请求场景下提升投机解码端到端性能加速收益 10%，在 16 并发请求下仍获得 5% 的性能收益。
+- 面向 Qwen3.5 系列训练 DFlash 草稿模型，建立草稿质量、接受率、吞吐和延迟等评测流程，并在内部 benchmark 上取得当前最优加速收益。
 
 ### 算子优化与 Agent 开发
 
@@ -48,16 +52,16 @@ ShowToc: true
 
 - 对标开源技术 EVO，设计并实现基于蒙特卡洛树搜索（MCTS）的 LLM 算子优化 Agent，将人工算子调优流程转化为多 Agent 自主搜索与迭代优化流程。
 - 负责 MCTS 搜索策略、多 Agent 任务编排与调度逻辑开发，支持复杂算子优化任务的自动拆解、候选代码生成、性能评测与反馈迭代。
-- 在长序列及复杂算子场景下提升候选生成质量与搜索效率，显著改善核心算子性能。
+- 在长序列及复杂算子场景下提升候选生成质量与搜索效率，实现核心算子倍数级性能提升。
 
 ### 鸿蒙生态程序分析底座构建
 
 2024 年至 2025 年，Team Leader
 
-- 基于鸿蒙生态程序分析底座方舟分析器 ArkAnalyzer 引入 C/C++ 语言解析能力，实现 TS 与 C/C++ 在 ArkAnalyzer 中的统一 IR 翻译与表达。
+- 基于鸿蒙生态程序分析底座方舟分析器 ArkAnalyzer 引入 C/C++ 语言解析能力，实现 TS 与 C/C++ 在 ArkAnalyzer 中的统一 IR 翻译与表达，为鸿蒙生态 Code Agent 提供跨语言静态分析语义输入。
 - 主导端到端架构设计、核心技术攻关与可行性验证，组织团队完成 C/C++ 核心语法及常用标准库的分析能力交付。
 - 将 C++ 特性深度接入 ArkIR，实现万行级代码语义秒级解析。
-- 基于该底座开发检查工具，用于发现高风险内存管理及性能规范问题。
+- 基于该底座开发检查工具，在关键版本发布前拦截数十项高危内存管理及性能规范违例问题。
 - 项目地址：[openharmony-sig/arkanalyzer](https://gitcode.com/openharmony-sig/arkanalyzer/tree/ArkAnalyzer-cpp-tooling)
 
 ### 相似算子识别
@@ -82,7 +86,7 @@ ShowToc: true
 
 ## 技术栈
 
-- 大模型推理加速：Speculative Decoding、MTP、PEARL、SSD、EAGLE-3、DFlash、vLLM、vLLM Speculators。
-- AI Agent 与算子优化：MCTS、多 Agent 编排、任务规划、候选代码生成、性能反馈迭代。
-- 代码智能与程序分析：Clang AST、tree-sitter、Joern、代码属性图、ArkAnalyzer、ArkIR。
+- 大模型推理加速：Speculative Decoding、MTP、PEARL、SSD、EAGLE-3、DFlash、vLLM、vLLM Speculators、草稿模型训练、推理适配、接受率分析与端到端性能评测。
+- AI Agent 与算子优化：MCTS、多 Agent 编排、任务规划、候选代码生成、性能反馈迭代，具备面向高性能算子的自动优化 Agent 开发经验。
+- 代码智能与程序分析：Clang AST、tree-sitter、Joern、代码属性图、ArkAnalyzer、ArkIR，具备跨语言静态分析底座与 Code Agent 语义输入构建经验。
 - 工程与语言：Python、Git、Docker、Linux。
