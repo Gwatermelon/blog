@@ -1,6 +1,5 @@
-import fs from 'node:fs';
-
 import { expect, test } from '@playwright/test';
+import { downloadDocx, inspectDocx } from '../helpers/docx.mjs';
 
 test('home page keeps the contribution calendar and article feed usable', async ({ page }) => {
   await page.goto('/');
@@ -44,17 +43,15 @@ test('Article pages expose a valid Word download', async ({ page }) => {
   const downloadButton = page.getByRole('button', { name: '下载 Word 文档' });
   await expect(downloadButton).toBeVisible();
 
-  const downloadPromise = page.waitForEvent('download');
-  await downloadButton.click();
-  const download = await downloadPromise;
+  const { download, document, files } = await downloadDocx(page);
   expect(download.suggestedFilename()).toBe('model-parallelism-deployment.docx');
 
-  const downloadPath = await download.path();
-  expect(downloadPath).toBeTruthy();
-  const bytes = fs.readFileSync(downloadPath);
-  expect(bytes.readUInt32LE(0)).toBe(0x04034b50);
-  expect(bytes.includes(Buffer.from('大模型推理并行部署', 'utf8'))).toBe(true);
-  expect(bytes.includes(Buffer.from('Requests', 'utf8'))).toBe(true);
+  expect(document).toContain('大模型推理并行部署');
+  expect(document).toContain('Requests');
+  const structure = await inspectDocx(page, files);
+  expect(structure.drawings.filter(image => image.name.startsWith('公式：'))).toHaveLength(3);
+  expect(structure.tables).toBeGreaterThan(0);
+  expect(structure.listIds.length).toBeGreaterThan(0);
 });
 
 test('Todo completion state survives a reload', async ({ page }) => {
