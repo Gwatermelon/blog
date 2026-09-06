@@ -262,8 +262,24 @@ if (publicDir) {
       if (/(?:<p>\s*\$\$|\$\$\s*<\/p>)/.test(html)) addIssue(`${relative} contains an unprocessed display math delimiter`);
       if (html.includes('blog-shf.pages.dev')) addIssue(`${relative} contains the legacy pages.dev domain`);
 
-      for (const match of html.matchAll(/(?:href|src)=(?:"([^"]+)"|'([^']+)'|([^\s>]+))/gi)) {
-        let url = (match[1] || match[2] || match[3]).replaceAll('&amp;', '&');
+      const referencedUrls = [...html.matchAll(/(?:href|src)=(?:"([^"]+)"|'([^']+)'|([^\s>]+))/gi)]
+        .map(match => match[1] || match[2] || match[3]);
+      for (const match of html.matchAll(/\bsrcset=(?:"([^"]+)"|'([^']+)')/gi)) {
+        const srcset = match[1] || match[2];
+        if (!srcset.includes('data:')) referencedUrls.push(...srcset.split(',').map(candidate => candidate.trim().split(/\s+/)[0]));
+      }
+      for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
+        const tag = match[0];
+        const src = tag.match(/\bsrc=(?:"([^"]+)"|'([^']+)'|([^\s>]+))/i);
+        const url = src && (src[1] || src[2] || src[3]);
+        if (url && !/^(?:https?:|\/\/|data:)/.test(url) && /\.(?:png|jpe?g|webp)(?:[?#]|$)/i.test(url)) {
+          if (!/\bwidth=["']?[1-9]\d*(?:["'\s>])/.test(tag) || !/\bheight=["']?[1-9]\d*(?:["'\s>])/.test(tag)) {
+            addIssue(`${relative} has a local raster image without positive width and height: '${url}'`);
+          }
+        }
+      }
+      for (const reference of referencedUrls) {
+        let url = reference.replaceAll('&amp;', '&');
         if (/^https?:\/\//.test(url)) {
           const absoluteUrl = new URL(url);
           if (!siteOrigin || absoluteUrl.origin !== siteOrigin) continue;

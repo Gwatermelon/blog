@@ -66,6 +66,12 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
+`test:e2e` 每次都会先执行源码校验、Hugo 构建和产物校验，再启动独立的本地服务，避免测试旧的 `public/`。Linux 使用与部署相同的 Bash 构建脚本；Windows/macOS 需要预先安装 `.hugo-version` 指定的版本，也可以通过 `HUGO_BIN` 指定 Hugo 可执行文件的完整路径。已安装固定版本时，可用 `npm run build` 单独构建。公式相关测试需要访问 MathJax CDN。
+
+文章图片会自动带上宽高，并为较大的本地 PNG/JPEG/WebP 图片生成响应式版本；Word 下载仍使用原图。下载时，MathJax 公式转换为高清 PNG 嵌入文档，保留行内公式、分式、矩阵和上下标的视觉排版，但不是可编辑的 Word 公式。公式或图片加载失败时会提示重试，避免下载内容不完整的文档。导出转换使用 MathJax 3.2.2 的运行时接口，升级 MathJax 时应同时运行导出回归测试。
+
+首页贡献图按 GitHub 用户缓存到浏览器：一小时内直接复用；一小时至七天内先显示缓存再刷新；刷新失败时保留旧记录并标注状态。缓存损坏或浏览器禁用存储时仍可直接请求接口。
+
 ## 许可
 
 网站程序代码使用 [MIT License](LICENSE)。原创文章与图片适用 [内容版权说明](CONTENT_LICENSE.md)，第三方材料仍归原权利人所有。

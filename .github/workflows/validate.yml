@@ -19,9 +19,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Validate and build production site
-        run: bash scripts/build-site.sh
-
       - name: Install browser test dependencies
         run: npm ci
 

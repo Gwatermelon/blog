@@ -11,10 +11,10 @@ export default defineConfig({
     trace: 'retain-on-failure'
   },
   webServer: {
-    command: 'node scripts/serve-public.mjs',
+    command: 'node scripts/serve-test-site.mjs',
     url: 'http://127.0.0.1:4173/',
-    reuseExistingServer: !process.env.CI,
-    timeout: 30_000
+    reuseExistingServer: false,
+    timeout: 120_000
   },
   projects: [
     {

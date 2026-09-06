@@ -1,3 +1,5 @@
+import { prepareMath } from './docx-math.js';
+
 (() => {
   const button = document.querySelector('[data-docx-download]');
   if (!button) return;
@@ -26,7 +28,7 @@
       if (status) status.textContent = '已开始下载';
     } catch (error) {
       console.error(error);
-      if (status) status.textContent = '生成失败，请稍后重试';
+      if (status) status.textContent = `生成失败：${error.message || '请稍后重试'}`;
     } finally {
       button.disabled = false;
       if (label) label.textContent = previousLabel || '下载 Word 文档';
@@ -40,6 +42,10 @@
     if (!content) throw new Error('Article content not found');
 
     const builder = new DocxBuilder(title);
+    builder.mathRuns = await prepareMath(content, (media) => builder.addDrawing(media));
+    for (const image of content.querySelectorAll('img')) {
+      builder.imageRuns.set(image, await builder.imageRun(image));
+    }
     builder.addTitle(title);
     if (description) builder.addSubtitle(description);
     builder.addMeta(`来源：${location.href.split('#')[0]}`);
@@ -62,6 +68,9 @@
       this.media = [];
       this.nextRelId = 1;
       this.nextDrawingId = 1;
+      this.mathRuns = new WeakMap();
+      this.imageRuns = new WeakMap();
+      this.lists = [];
     }
 
     addTitle(text) {
@@ -84,11 +93,17 @@
       if (!(element instanceof Element)) return;
       if (element.matches('.anchor, script, style')) return;
 
+      const media = this.mathRuns.get(element) || this.imageRuns.get(element);
+      if (media) {
+        this.body.push(paragraph([media]));
+        return;
+      }
+
       const tag = element.tagName.toLowerCase();
       if (/^h[1-6]$/.test(tag)) {
         const level = Math.min(Number(tag[1]), 3);
-        const text = cleanText(element.textContent || '');
-        if (text) this.body.push(paragraph([run(text, { bold: true })], { style: `Heading${level}` }));
+        const runs = this.inlineRuns([...element.childNodes], { bold: true });
+        if (runs.length) this.body.push(paragraph(runs, { style: `Heading${level}` }));
         return;
       }
 
@@ -104,13 +119,13 @@
       }
 
       if (tag === 'blockquote') {
-        const text = cleanText(element.innerText || element.textContent || '');
-        if (text) this.body.push(paragraph([run(text, { italic: true })], { style: 'Quote' }));
+        const runs = this.inlineRuns([...element.childNodes], { italic: true });
+        if (runs.length) this.body.push(paragraph(runs, { style: 'Quote' }));
         return;
       }
 
       if (tag === 'ul' || tag === 'ol') {
-        await this.addList(element, tag === 'ol' ? 2 : 1, listLevel);
+        await this.addList(element, listLevel);
         return;
       }
 
@@ -119,22 +134,20 @@
         return;
       }
 
-      if (tag === 'img') {
-        await this.addImage(element);
-        return;
-      }
-
       for (const child of [...element.children]) await this.addBlock(child, listLevel);
     }
 
     async addParagraph(element) {
-      const runs = this.inlineRuns([...element.childNodes].filter((node) => node.nodeName.toLowerCase() !== 'img'));
+      const runs = this.inlineRuns([...element.childNodes]);
       if (runs.length > 0) this.body.push(paragraph(runs));
-      for (const image of element.querySelectorAll(':scope > img')) await this.addImage(image);
     }
 
-    async addList(element, numId, level) {
+    async addList(element, level) {
+      let numId = this.lists.push({ ordered: element.tagName === 'OL', start: Number(element.getAttribute('start') || 1), level });
       for (const item of [...element.children].filter((child) => child.tagName?.toLowerCase() === 'li')) {
+        if (element.tagName === 'OL' && item.hasAttribute('value')) {
+          numId = this.lists.push({ ordered: true, start: Number(item.getAttribute('value')), level });
+        }
         const directNodes = [...item.childNodes].filter((child) => {
           const tag = child.nodeName.toLowerCase();
           return tag !== 'ul' && tag !== 'ol';
@@ -142,7 +155,7 @@
         const runs = this.inlineRuns(directNodes);
         if (runs.length > 0) this.body.push(paragraph(runs, { numId, level }));
         for (const nested of [...item.children].filter((child) => ['ul', 'ol'].includes(child.tagName.toLowerCase()))) {
-          await this.addList(nested, nested.tagName.toLowerCase() === 'ol' ? 2 : 1, level + 1);
+          await this.addList(nested, level + 1);
         }
       }
     }
@@ -151,43 +164,46 @@
       const rows = [...element.querySelectorAll('tr')].map((row) => (
         [...row.children]
           .filter((cell) => ['td', 'th'].includes(cell.tagName.toLowerCase()))
-          .map((cell) => ({ header: cell.tagName.toLowerCase() === 'th', text: cleanText(cell.innerText || cell.textContent || '') }))
+          .map((cell) => ({ runs: this.inlineRuns([...cell.childNodes], { bold: cell.tagName === 'TH' }), header: cell.tagName === 'TH' }))
       )).filter((row) => row.length > 0);
       if (rows.length > 0) this.body.push(table(rows));
     }
 
-    async addImage(image) {
+    async imageRun(image) {
       try {
-        const sourceUrl = new URL(image.currentSrc || image.src, location.href);
-        if (sourceUrl.origin !== location.origin) return;
-        const response = await fetch(sourceUrl.href);
-        if (!response.ok) return;
+        // The original source retains full resolution even when srcset chose a small variant.
+        const sourceUrl = new URL(image.src, location.href);
+        if (sourceUrl.origin !== location.origin) throw new Error('跨域图片无法导出');
+        const response = await fetch(sourceUrl.href, { signal: AbortSignal.timeout(15_000) });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const blob = await response.blob();
         const contentType = normalizeImageType(blob.type, sourceUrl.pathname);
-        if (!contentType) return;
-
-        const extension = contentType === 'image/jpeg' ? '.jpeg' : `.${contentType.split('/')[1]}`;
-        const fileName = `image${this.media.length + 1}${extension}`;
-        const relId = this.addRelationship('http://schemas.openxmlformats.org/officeDocument/2006/relationships/image', `media/${fileName}`);
-        const width = image.naturalWidth || image.width || 960;
-        const height = image.naturalHeight || image.height || 540;
-        const maxWidthEmu = 5_600_000;
-        let widthEmu = Math.round(width * 9525);
-        let heightEmu = Math.round(height * 9525);
-        if (widthEmu > maxWidthEmu) {
-          const scale = maxWidthEmu / widthEmu;
-          widthEmu = maxWidthEmu;
-          heightEmu = Math.round(heightEmu * scale);
-        }
-
-        this.media.push({ name: `word/media/${fileName}`, contentType, data: new Uint8Array(await blob.arrayBuffer()) });
-        this.body.push(paragraph([
-          drawing({ relId, docPrId: this.nextDrawingId++, name: image.alt || fileName, widthEmu, heightEmu })
-        ], { spacingBefore: 120, spacingAfter: 120 }));
-      } catch {
-        const alt = image.alt ? `图片：${image.alt}` : '';
-        if (alt) this.body.push(paragraph([run(alt, { italic: true, color: '65708A' })]));
+        if (!contentType) throw new Error('不支持的图片格式');
+        // Decode the fetched file: lazy images can still have zero natural dimensions.
+        const bitmap = await createImageBitmap(blob);
+        const { width, height } = bitmap;
+        bitmap.close();
+        return this.addDrawing({ data: new Uint8Array(await blob.arrayBuffer()), contentType, width, height, name: image.alt || '文章图片' });
+      } catch (error) {
+        throw new Error(`图片「${image.alt || image.getAttribute('src')}」未能导出：${error.message}`);
       }
+    }
+
+    addDrawing({ data, contentType, width, height, name, position = 0 }) {
+      const extension = contentType === 'image/jpeg' ? '.jpeg' : `.${contentType.split('/')[1]}`;
+      const fileName = `image${this.media.length + 1}${extension}`;
+      const relId = this.addRelationship('http://schemas.openxmlformats.org/officeDocument/2006/relationships/image', `media/${fileName}`);
+      const maxWidthEmu = 5_600_000;
+      let widthEmu = Math.round(width * 9525);
+      let heightEmu = Math.round(height * 9525);
+      if (widthEmu > maxWidthEmu) {
+        const scale = maxWidthEmu / widthEmu;
+        widthEmu = maxWidthEmu;
+        heightEmu = Math.round(heightEmu * scale);
+      }
+
+      this.media.push({ name: `word/media/${fileName}`, contentType, data });
+      return drawing({ relId, docPrId: this.nextDrawingId++, name, widthEmu, heightEmu, position });
     }
 
     inlineRuns(nodes, style = {}) {
@@ -200,6 +216,12 @@
         }
         if (!(node instanceof Element) || node.matches('.anchor')) continue;
 
+        const media = this.mathRuns.get(node) || this.imageRuns.get(node);
+        if (media) {
+          result.push(media);
+          continue;
+        }
+
         const tag = node.tagName.toLowerCase();
         if (tag === 'br') {
           result.push(breakRun());
@@ -210,6 +232,10 @@
         } else if (tag === 'em' || tag === 'i') {
           result.push(...this.inlineRuns([...node.childNodes], { ...style, italic: true }));
         } else if (tag === 'a') {
+          if (node.querySelector('img, mjx-container')) {
+            result.push(...this.inlineRuns([...node.childNodes], style));
+            continue;
+          }
           const text = cleanText(node.textContent || '');
           const href = node.getAttribute('href');
           if (text && href && !href.startsWith('#')) {
@@ -242,7 +268,7 @@
         { name: 'docProps/app.xml', data: appProps() },
         { name: 'word/document.xml', data: documentXml(this.body) },
         { name: 'word/styles.xml', data: stylesXml() },
-        { name: 'word/numbering.xml', data: numberingXml() },
+        { name: 'word/numbering.xml', data: numberingXml(this.lists) },
         { name: 'word/_rels/document.xml.rels', data: documentRels(this.relationships) },
         ...this.media
       ]);
@@ -270,7 +296,7 @@
     const style = options.style ? `<w:pStyle w:val="${escapeXml(options.style)}"/>` : '';
     const spacing = `<w:spacing w:before="${options.spacingBefore ?? 0}" w:after="${options.spacingAfter ?? 160}" w:line="360" w:lineRule="auto"/>`;
     const numbering = options.numId
-      ? `<w:numPr><w:ilvl w:val="${Math.min(options.level ?? 0, 5)}"/><w:numId w:val="${options.numId}"/></w:numPr>`
+      ? `<w:numPr><w:ilvl w:val="${Math.min(options.level ?? 0, 8)}"/><w:numId w:val="${options.numId}"/></w:numPr>`
       : '';
     return `<w:p><w:pPr>${style}${numbering}${spacing}</w:pPr>${runs.join('')}</w:p>`;
   }
@@ -299,13 +325,13 @@
     return `<w:hyperlink r:id="${relId}" w:history="1">${run(text, { color: '2868D8', underline: true })}</w:hyperlink>`;
   }
 
-  function drawing({ relId, docPrId, name, widthEmu, heightEmu }) {
+  function drawing({ relId, docPrId, name, widthEmu, heightEmu, position }) {
     const safeName = escapeXml(name);
-    return `<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${widthEmu}" cy="${heightEmu}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${docPrId}" name="${safeName}"/><wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${docPrId}" name="${safeName}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${relId}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${widthEmu}" cy="${heightEmu}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
+    return `<w:r><w:rPr><w:position w:val="${position}"/></w:rPr><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${widthEmu}" cy="${heightEmu}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${docPrId}" name="${safeName}"/><wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="${docPrId}" name="${safeName}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${relId}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${widthEmu}" cy="${heightEmu}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
   }
 
   function table(rows) {
-    const rowXml = rows.map((row) => `<w:tr>${row.map((cell) => `<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:tcMar><w:top w:w="100" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="100" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tcMar><w:shd w:val="clear" w:color="auto" w:fill="${cell.header ? 'EDF1F7' : 'FFFFFF'}"/></w:tcPr>${paragraph([run(cell.text, { bold: cell.header })], { spacingAfter: 80 })}</w:tc>`).join('')}</w:tr>`).join('');
+    const rowXml = rows.map((row) => `<w:tr>${row.map((cell) => `<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:tcMar><w:top w:w="100" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="100" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tcMar><w:shd w:val="clear" w:color="auto" w:fill="${cell.header ? 'EDF1F7' : 'FFFFFF'}"/></w:tcPr>${paragraph(cell.runs, { spacingAfter: 80 })}</w:tc>`).join('')}</w:tr>`).join('');
     return `<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblBorders><w:top w:val="single" w:sz="6" w:color="DFE5EF"/><w:left w:val="single" w:sz="6" w:color="DFE5EF"/><w:bottom w:val="single" w:sz="6" w:color="DFE5EF"/><w:right w:val="single" w:sz="6" w:color="DFE5EF"/><w:insideH w:val="single" w:sz="6" w:color="DFE5EF"/><w:insideV w:val="single" w:sz="6" w:color="DFE5EF"/></w:tblBorders></w:tblPr>${rowXml}</w:tbl>`;
   }
 
@@ -321,8 +347,20 @@
     return `<w:style w:type="paragraph" w:styleId="${id}"><w:name w:val="${name}"/><w:pPr><w:spacing w:before="${before}" w:after="${after}" w:line="360" w:lineRule="auto"/></w:pPr><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:eastAsia="Microsoft YaHei"/>${bold ? '<w:b/>' : ''}${italic ? '<w:i/>' : ''}${shading ? `<w:shd w:val="clear" w:color="auto" w:fill="${shading}"/>` : ''}<w:color w:val="${color}"/><w:sz w:val="${size}"/></w:rPr></w:style>`;
   }
 
-  function numberingXml() {
-    return xml(`<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:abstractNum w:abstractNumId="1"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr><w:rPr><w:rFonts w:ascii="Symbol" w:hAnsi="Symbol"/></w:rPr></w:lvl><w:lvl w:ilvl="1"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="◦"/><w:pPr><w:ind w:left="1080" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum><w:abstractNum w:abstractNumId="2"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl><w:lvl w:ilvl="1"><w:start w:val="1"/><w:numFmt w:val="lowerLetter"/><w:lvlText w:val="%2."/><w:pPr><w:ind w:left="1080" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="1"/></w:num><w:num w:numId="2"><w:abstractNumId w:val="2"/></w:num></w:numbering>`);
+  function numberingXml(lists) {
+    const definitions = lists.map((list, index) => {
+      const id = index + 1;
+      const levels = Array.from({ length: 9 }, (_, level) => (
+        `<w:lvl w:ilvl="${level}"><w:start w:val="1"/><w:numFmt w:val="${list.ordered ? 'decimal' : 'bullet'}"/><w:lvlText w:val="${list.ordered ? '%' + (level + 1) + '.' : '•'}"/><w:pPr><w:ind w:left="${720 + level * 360}" w:hanging="360"/></w:pPr></w:lvl>`
+      )).join('');
+      return `<w:abstractNum w:abstractNumId="${id}">${levels}</w:abstractNum>`;
+    }).join('');
+    const instances = lists.map((list, index) => {
+      const id = index + 1;
+      const start = Number.isInteger(list.start) ? list.start : 1;
+      return `<w:num w:numId="${id}"><w:abstractNumId w:val="${id}"/><w:lvlOverride w:ilvl="${Math.min(list.level, 8)}"><w:startOverride w:val="${start}"/></w:lvlOverride></w:num>`;
+    }).join('');
+    return xml(`<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">${definitions}${instances}</w:numbering>`);
   }
 
   function contentTypes(media) {

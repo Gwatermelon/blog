@@ -35,6 +35,8 @@ body {
 
 .main { max-width: 820px; }
 
+.post-content img { height: auto; }
+
 .main:has(> .home-layout) {
   width: min(100% - 48px, 820px);
   max-width: none;
