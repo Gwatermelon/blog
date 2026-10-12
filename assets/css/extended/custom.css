@@ -309,7 +309,7 @@ body {
 .post-content h3 { margin-top: 1.8em; }
 .post-content a { color: var(--accent); box-shadow: 0 1px var(--accent); }
 .post-content blockquote { border-inline-start-color: var(--accent); background: var(--accent-soft); border-radius: 0 12px 12px 0; }
-.post-content table { overflow: hidden; border: 1px solid var(--border); border-radius: 12px; }
+.post-content table { overflow-x: auto; overflow-y: hidden; border: 1px solid var(--border); border-radius: 12px; }
 .post-content code { border-radius: 6px; }
 .post-content pre code { font-size: 14px; line-height: 1.7; }
 
