@@ -12,7 +12,13 @@
     {{- with $u.Fragment }}{{ $src = printf "%s#%s" $src . }}{{ end -}}
   {{- end -}}
 {{- end -}}
-{{- $attributes := merge .Attributes (dict "alt" .Text "src" $src "title" (.Title | transform.HTMLEscape) "loading" "lazy" "decoding" "async") -}}
+{{- $loading := "lazy" -}}
+{{- with .Page.Param "imageLoading" -}}
+  {{- if eq (lower (printf "%v" .)) "eager" -}}
+    {{- $loading = "eager" -}}
+  {{- end -}}
+{{- end -}}
+{{- $attributes := merge .Attributes (dict "alt" .Text "src" $src "title" (.Title | transform.HTMLEscape) "loading" $loading "decoding" "async") -}}
 {{- with $image -}}
   {{- $attributes = merge (dict "width" .Width "height" .Height) $attributes -}}
   {{- $variants := slice -}}
