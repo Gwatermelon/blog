@@ -8,6 +8,7 @@ summary: "本文会从MTP诞生的前置方法Medusa开始讲解，介绍meta发
 tags: ["模型推理", "MTP", "Multi-token Prediction", "投机解码", "Medusa", "DeepSeek-V3"]
 categories: ["模型推理"]
 math: true
+imageLoading: eager
 ShowToc: true
 TocOpen: true
 ---
