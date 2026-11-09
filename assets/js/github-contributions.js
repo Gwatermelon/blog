@@ -90,23 +90,32 @@
     Number.isInteger(item.level) && item.level >= 0 && item.level <= 4
   ));
   let cached = null;
+  // An official GitHub snapshot ships with the page, including for first-time visitors.
+  try {
+    const snapshot = JSON.parse(document.querySelector('[data-contribution-snapshot]')?.textContent || 'null');
+    if (snapshot?.username === username && Number.isFinite(snapshot.savedAt) && validItems(snapshot.contributions)) {
+      cached = { savedAt: snapshot.savedAt, items: snapshot.contributions, snapshot: true };
+    }
+  } catch {
+    // The live endpoint can still supply data if a snapshot is unavailable.
+  }
   try {
     const value = JSON.parse(localStorage.getItem(cacheKey));
     const age = Date.now() - value?.savedAt;
-    if (Number.isFinite(age) && age >= 0 && age < usableFor && validItems(value?.items)) cached = value;
+    if (Number.isFinite(age) && age >= 0 && age < usableFor && validItems(value?.items) && (!cached || value.savedAt > cached.savedAt)) cached = value;
   } catch {
     // Storage is optional; private browsing and corrupt entries must not break the calendar.
   }
   if (cached) {
     render(cached.items);
-    if (Date.now() - cached.savedAt < freshFor) return;
+    if (!cached.snapshot && Date.now() - cached.savedAt < freshFor) return;
     summary.textContent += '（上次记录，正在更新）';
   }
 
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), 8000);
 
-  fetch(`https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=last`, {
+  fetch(`/api/github-contributions?username=${encodeURIComponent(username)}`, {
     headers: { Accept: 'application/json' },
     signal: controller.signal
   })
@@ -117,6 +126,10 @@
     .then((data) => {
       if (!validItems(data.contributions)) throw new Error('Unexpected contributions response');
       render(data.contributions);
+      if (data.stale) {
+        summary.textContent += '（上次记录，暂未更新）';
+        return;
+      }
       try {
         localStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), items: data.contributions }));
       } catch {

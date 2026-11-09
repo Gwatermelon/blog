@@ -35,6 +35,11 @@
     暂时无法读取贡献数据，<a href="https://github.com/{{ $username }}" target="_blank" rel="noopener">前往 GitHub 查看</a>。
   </p>
 </aside>
+{{- with (readFile "data/github-contributions.json" | transform.Unmarshal) }}
+{{- if eq .username $username }}
+<script type="application/json" data-contribution-snapshot>{{ . | jsonify | safeJS }}</script>
+{{- end }}
+{{- end }}
 {{- $contributions := resources.Get "js/github-contributions.js" | js.Build | resources.Minify | fingerprint }}
 <script defer crossorigin="anonymous" src="{{ $contributions.RelPermalink }}" integrity="{{ $contributions.Data.Integrity }}" data-github-contributions data-username="{{ $username }}"></script>
 {{- end }}
