@@ -115,6 +115,20 @@ test('Multi-token Prediction images load without waiting for scrolling', async (
   expect(states.every(image => image.currentSrc.length > 0 && image.naturalWidth > 0)).toBe(true);
 });
 
+test('Virtual Width Network images load without waiting for scrolling', async ({ page }) => {
+  await page.goto('/ai-fundamentals/virtual-width-network/');
+  const images = page.locator('.post-content img');
+  await expect(images).toHaveCount(2);
+  await expect.poll(async () => images.evaluateAll(items => items.every(image => image.complete && image.naturalWidth > 0))).toBe(true);
+  const states = await images.evaluateAll(items => items.map(image => ({
+    loading: image.loading,
+    currentSrc: image.currentSrc,
+    naturalWidth: image.naturalWidth
+  })));
+  expect(states.every(image => image.loading === 'eager')).toBe(true);
+  expect(states.every(image => image.currentSrc.length > 0 && image.naturalWidth > 0)).toBe(true);
+});
+
 test('Word reports unavailable math instead of silently exporting incomplete content', async ({ page }) => {
   await page.route('**/mathjax@3.2.2/**', route => route.abort());
   await page.goto('/model-inference/optimal-brain-surgeon/');
