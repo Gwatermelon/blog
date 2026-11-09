@@ -1,7 +1,7 @@
 const username = 'Gwatermelon';
 const freshFor = 60 * 60 * 1000;
 
-export const validItems = (items) => Array.isArray(items) && items.length >= 180 && items.every(item => (
+const validItems = (items) => Array.isArray(items) && items.length >= 180 && items.every(item => (
   item && /^\d{4}-\d{2}-\d{2}$/.test(item.date) &&
   Number.isInteger(item.count) && item.count >= 0 &&
   Number.isInteger(item.level) && item.level >= 0 && item.level <= 4
