@@ -8,6 +8,7 @@ summary: "VWN 扩大表征宽度，同时维持 Attention、FFN 的计算宽度�
 tags: ["AI 基础", "VWN", "Transformer", "GHC", "MTP"]
 categories: ["AI 基础原理"]
 math: true
+imageLoading: eager
 ShowToc: true
 TocOpen: true
 ---
