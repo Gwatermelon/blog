@@ -35,7 +35,7 @@
     暂时无法读取贡献数据，<a href="https://github.com/{{ $username }}" target="_blank" rel="noopener">前往 GitHub 查看</a>。
   </p>
 </aside>
-{{- with index hugo.Data "github-contributions" }}
+{{- with (readFile "data/github-contributions.json" | transform.Unmarshal) }}
 {{- if eq .username $username }}
 <script type="application/json" data-contribution-snapshot>{{ . | jsonify | safeJS }}</script>
 {{- end }}
